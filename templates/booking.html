@@ -1,0 +1,894 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block content %}
+<div class="booking-container">
+    <div class="booking-header">
+        <h1 class="booking-title">Craft Your Masterpiece</h1>
+        <p class="booking-subtitle">Tell us about your vision and let's create something beautiful together</p>
+    </div>
+
+    <form method="post" enctype="multipart/form-data" action="{% url 'portrait_booking' %}" class="booking-form" id="bookingForm" novalidate>
+        {% csrf_token %}
+        
+        <!-- Error Messages -->
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>Form Errors:</strong>
+                {% for error in form.non_field_errors %}
+                    <div>{{ error }}</div>
+                {% endfor %}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endif %}
+
+        <!-- Section 1: Personal Information -->
+        <fieldset class="form-section">
+            <legend class="section-title">Your Information</legend>
+            
+            <div class="row">
+                <!-- Full Name -->
+                <div class="col-md-6 mb-4">
+                    <div class="form-group">
+                        <label for="id_name" class="form-label">
+                            {{ form.name.label }}
+                            <span class="required-badge">*</span>
+                        </label>
+                        {{ form.name|add_class:"form-control form-control-lg" }}
+                        <div class="validation-message" id="nameError"></div>
+                        {% if form.name.errors %}
+                            <div class="invalid-feedback d-block">{{ form.name.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <!-- Frame Type - Part 1 -->
+<div class="col-md-6 mb-4">
+    <div class="form-group">
+        <label for="id_frame_type" class="form-label">
+            {{ form.frame_type.label }}
+        </label>
+        {{ form.frame_type }}
+        {% if form.frame_type.errors %}
+            <div class="invalid-feedback d-block">{{ form.frame_type.errors.0 }}</div>
+        {% endif %}
+        <small class="form-text text-muted">{{ form.frame_type.help_text }}</small>
+    </div>
+
+
+            <div class="row">
+                <!-- Email -->
+                <div class="col-md-6 mb-4">
+                    <div class="form-group">
+                        <label for="id_email" class="form-label">
+                            {{ form.email.label }}
+                            <span class="required-badge">*</span>
+                        </label>
+                        {{ form.email }}
+                        {% if form.email.errors %}
+                            <div class="invalid-feedback d-block">{{ form.email.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Phone -->
+                <div class="col-md-6 mb-4">
+                    <div class="form-group">
+                        <label for="id_phone" class="form-label">
+                            {{ form.phone.label }}
+                            <span class="required-badge">*</span>
+                        </label>
+                        {{ form.phone }}
+                        <div class="validation-message" id="phoneError"></div>
+                        {% if form.phone.errors %}
+                            <div class="invalid-feedback d-block">{{ form.phone.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+
+        <!-- Section 2: Address Information -->
+        <fieldset class="form-section">
+            <legend class="section-title">Delivery Address</legend>
+
+            <!-- Full Address -->
+            <div class="mb-4">
+                <div class="form-group">
+                    <label for="id_address" class="form-label">
+                        {{ form.address.label }}
+                        <span class="required-badge">*</span>
+                    </label>
+                    {{ form.address }}
+                    {% if form.address.errors %}
+                        <div class="invalid-feedback d-block">{{ form.address.errors.0 }}</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- State -->
+                <div class="col-md-6 mb-4">
+                    <div class="form-group">
+                        <label for="id_state" class="form-label">
+                            {{ form.state.label }}
+                            <span class="required-badge">*</span>
+                        </label>
+                        {{ form.state }}
+                        {% if form.state.errors %}
+                            <div class="invalid-feedback d-block">{{ form.state.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+<!-- District (Dynamically populated) -->
+                <div class="col-md-6 mb-4">
+                    <div class="form-group">
+                        <label for="id_district" class="form-label">
+                            {{ form.district.label }}
+                            <span class="required-badge">*</span>
+                        </label>
+                        {{ form.district }}
+                        {% if form.district.errors %}
+                            <div class="invalid-feedback d-block">{{ form.district.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- PIN Code -->
+                <div class="col-md-4 mb-4">
+                    <div class="form-group">
+                        <label for="id_pincode" class="form-label">
+                            {{ form.pincode.label }}
+                            <span class="required-badge">*</span>
+                        </label>
+                        {{ form.pincode }}
+                        <div class="validation-message" id="pincodeError"></div>
+                        {% if form.pincode.errors %}
+                            <div class="invalid-feedback d-block">{{ form.pincode.errors.0 }}</div>
+                        {% endif %}
+                        <small class="form-text text-muted">{{ form.pincode.help_text }}</small>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+
+        <!-- Section 3: Artwork Details -->
+        <fieldset class="form-section">
+            <legend class="section-title">Artwork Specifications</legend>
+
+            <div class="row">
+                <!-- Category -->
+                <div class="col-md-6 mb-4">
+                    <div class="form-group">
+                        <label for="id_category" class="form-label">
+                            {{ form.category.label }}
+                            <span class="required-badge">*</span>
+                        </label>
+                        {{ form.category }}
+                        {% if form.category.errors %}
+                            <div class="invalid-feedback d-block">{{ form.category.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Size with Tooltips -->
+                <div class="col-md-6 mb-4">
+                    <div class="form-group">
+                        <label for="id_size" class="form-label">
+                            {{ form.size.label }}
+                            <span class="required-badge">*</span>
+                        </label>
+                        <div class="size-select-wrapper">
+                            {{ form.size }}
+                            <div id="sizeInfo" class="size-info-box" style="display: none;">
+                                <div class="size-info-title"></div>
+                                <div class="size-info-desc"></div>
+                                <div class="size-info-ideal"></div>
+                            </div>
+                        </div>
+                        {% if form.size.errors %}
+                            <div class="invalid-feedback d-block">{{ form.size.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Total Price (Read-only) -->
+                <div class="col-md-6 mb-4">
+                    <div class="form-group">
+                        <label for="id_total_price" class="form-label">
+                            {{ form.total_price.label }}
+                        </label>
+                        {{ form.total_price }}
+                        {% if form.total_price.errors %}
+                            <div class="invalid-feedback d-block">{{ form.total_price.errors.0 }}</div>
+                        {% endif %}
+                        <small class="form-text text-muted">Calculated based on size and category selection</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reference Image -->
+            <div class="mb-4">
+                <div class="form-group">
+                    <label for="id_reference_image" class="form-label">
+                        {{ form.reference_image.label }}
+                        <span class="required-badge">*</span>
+                    </label>
+                    <div class="file-upload-wrapper">
+                        {{ form.reference_image }}
+                        <small class="form-text text-muted d-block mt-2">{{ form.reference_image.help_text }}</small>
+                    </div>
+                    {% if form.reference_image.errors %}
+                        <div class="invalid-feedback d-block">{{ form.reference_image.errors.0 }}</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Additional Details -->
+            <div class="mb-4">
+                <div class="form-group">
+                    <label for="id_description" class="form-label">
+                        {{ form.description.label }}
+                    </label>
+                    {{ form.description }}
+                    {% if form.description.errors %}
+                        <div class="invalid-feedback d-block">{{ form.description.errors.0 }}</div>
+                    {% endif %}
+                    <small class="form-text text-muted">Share any specific details or preferences about your artwork</small>
+                </div>
+            </div>
+        </fieldset>
+
+        <!-- Hidden Fields -->
+        {{ form.price }}
+
+        <!-- Submit Button -->
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary btn-lg btn-block booking-submit" id="submitBtn">
+                Submit Booking & Proceed to Payment
+            </button>
+            <p class="text-center text-muted mt-3">
+                <small>By submitting, you agree to our terms. You'll complete payment in the next step.</small>
+            </p>
+        </div>
+    </form>
+</div>
+
+<!-- Styles -->
+<style>
+    .booking-container {
+        max-width: 900px;
+        margin: 2rem auto;
+        padding: 0 15px;
+    }
+
+    .booking-header {
+        text-align: center;
+        margin-bottom: 3rem;
+        padding: 2rem 0;
+    }
+
+    .booking-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 3rem;
+        font-weight: 600;
+        color: #000;
+        margin-bottom: 0.5rem;
+        letter-spacing: 1px;
+    }
+
+    .booking-subtitle {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 1.1rem;
+        color: #666;
+    }
+
+    .booking-form {
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+    }
+
+    .form-section {
+        border: none;
+        padding: 2rem;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    .form-section:last-of-type {
+        border-bottom: none;
+    }
+
+    .section-title {
+        display: block;
+        font-family: 'Playfair Display', serif;
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #000;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 2px solid #000;
+    }
+
+    .form-label {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 500;
+        color: #1a1a1a;
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .required-badge {
+        color: #000;
+        font-weight: bold;
+    }
+
+    .form-control-lg {
+        height: 48px;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        border: 2px solid #d0d0d0;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+    }
+
+    .form-control-lg:focus {
+        border-color: #000;
+        box-shadow: 0 0 0 0.2rem rgba(0, 0, 0, 0.1);
+        outline: none;
+    }
+
+    .form-control-lg:hover:not(:focus) {
+        border-color: #999;
+    }
+
+    /* Validation States */
+    .form-control-lg.is-valid {
+        border-color: #28a745;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%2328a745' d='M2.3 6.73.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right calc(0.375em + 0.1875rem) center;
+        background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+    }
+
+    .form-control-lg.is-invalid {
+        border-color: #000;
+        background-image: none;
+    }
+
+    /* Validation Message */
+    .validation-message {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 0.8rem;
+        color: #666;
+        margin-top: 0.35rem;
+        min-height: 1.2em;
+        transition: color 0.2s ease;
+    }
+
+    .validation-message.error {
+        color: #333;
+    }
+
+    .validation-message.success {
+        color: #28a745;
+    }
+
+    textarea.form-control-lg {
+        height: auto;
+        min-height: 120px;
+        resize: vertical;
+    }
+
+    .form-control-file {
+        display: block;
+        width: 100%;
+        padding: 1rem;
+        border: 2px dashed #333;
+        border-radius: 6px;
+        background-color: #fafafa;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .form-control-file:hover {
+        border-color: #000;
+        background-color: #f5f5f5;
+    }
+
+    .file-upload-wrapper {
+        position: relative;
+    }
+
+    .size-select-wrapper {
+        position: relative;
+    }
+
+    .size-info-box {
+        margin-top: 1rem;
+        padding: 1rem;
+        background: #fafafa;
+        border-left: 3px solid #000;
+        border-radius: 4px;
+        animation: slideDown 0.3s ease-out;
+    }
+
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .size-info-title {
+        font-weight: 600;
+        font-size: 1rem;
+        color: #000;
+        margin-bottom: 0.5rem;
+    }
+
+    .size-info-desc {
+        font-size: 0.9rem;
+        color: #333;
+        margin-bottom: 0.5rem;
+    }
+
+    .size-info-ideal {
+        font-size: 0.9rem;
+        color: #555;
+        font-weight: 500;
+    }
+
+    .form-text {
+        display: block;
+        margin-top: 0.5rem;
+        font-size: 0.85rem;
+    }
+
+    .invalid-feedback {
+        color: #333;
+        margin-top: 0.25rem;
+        font-size: 0.85rem;
+    }
+
+    .form-actions {
+        padding: 2rem;
+        background: #fafafa;
+        border-top: 1px solid #e0e0e0;
+    }
+
+    .booking-submit {
+        background: #000;
+        border: 2px solid #000;
+        font-weight: 600;
+        font-size: 1rem;
+        padding: 1rem 2rem;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+        color: #fff;
+        font-family: 'Montserrat', sans-serif;
+        letter-spacing: 0.5px;
+    }
+
+    .booking-submit:hover {
+        background: #333;
+        border-color: #333;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .booking-submit:active {
+        transform: translateY(0);
+    }
+
+    .booking-submit:disabled {
+        background: #999;
+        border-color: #999;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .booking-title {
+            font-size: 2rem;
+        }
+
+        .booking-subtitle {
+            font-size: 1rem;
+        }
+
+        .form-section {
+            padding: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+        }
+
+        .form-control-lg {
+            height: 44px;
+            font-size: 0.95rem;
+        }
+    }
+
+    /* Alert styling */
+    .alert {
+        margin-bottom: 1.5rem;
+        border-radius: 6px;
+    }
+
+    .alert-danger {
+        background-color: #f8f8f8;
+        border: 1px solid #ddd;
+        color: #333;
+    }
+</style>
+
+<!-- JavaScript for Form Validation and Other Features -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // State-District Mapping Data
+    const stateDistrictMap = {{ state_district_map|safe }};
+    const sizeDescriptions = {{ size_descriptions|safe }};
+
+    const stateSelect = document.getElementById('stateSelect');
+    const districtSelect = document.getElementById('districtSelect');
+    const sizeSelect = document.getElementById('sizeSelect');
+    const sizeInfo = document.getElementById('sizeInfo');
+    const form = document.getElementById('bookingForm');
+    const submitBtn = document.getElementById('submitBtn');
+
+    // =====================================================
+    // VALIDATION FUNCTIONS
+    // =====================================================
+
+    /**
+     * Phone Number Validation
+     * - Allow only numbers
+     * - Must be exactly 10 digits
+     * - Prevent typing more than 10 digits
+     */
+    const phoneInput = document.getElementById('id_phone');
+    if (phoneInput) {
+        phoneInput.addEventListener('input', function(e) {
+            // Remove all non-digit characters
+            let value = this.value.replace(/\D/g, '');
+            
+            // Limit to 10 digits
+            if (value.length > 10) {
+                value = value.slice(0, 10);
+            }
+            
+            this.value = value;
+            
+            // Validate and show message
+            validatePhone(this, value);
+        });
+
+        // Initial validation on load if there's a value
+        if (phoneInput.value) {
+            validatePhone(phoneInput, phoneInput.value);
+        }
+    }
+
+    function validatePhone(input, value) {
+        const errorDiv = document.getElementById('phoneError');
+        const validLength = 10;
+        
+        if (!value) {
+            input.classList.remove('is-valid', 'is-invalid');
+            errorDiv.textContent = '';
+            errorDiv.className = 'validation-message';
+            return false;
+        }
+        
+        if (value.length !== validLength) {
+            input.classList.remove('is-valid');
+            input.classList.add('is-invalid');
+            errorDiv.textContent = 'Phone number must be exactly ' + validLength + ' digits';
+            errorDiv.className = 'validation-message error';
+            return false;
+        }
+        
+        input.classList.remove('is-invalid');
+        input.classList.add('is-valid');
+        errorDiv.textContent = '';
+        errorDiv.className = 'validation-message';
+        return true;
+    }
+
+    /**
+     * Name Field Validation
+     * - Allow only alphabets and spaces
+     * - Disallow numbers and special characters
+     * - Auto-trim extra spaces
+     */
+    const nameInput = document.getElementById('id_name');
+    if (nameInput) {
+        nameInput.addEventListener('input', function(e) {
+            // Remove numbers and special characters, keep only letters and spaces
+            let value = this.value.replace(/[^a-zA-Z\s]/g, '');
+            
+            // Auto-trim extra spaces (keep only single spaces between words)
+            value = value.replace(/\s+/g, ' ').trim();
+            
+            this.value = value;
+            
+            // Validate and show message
+            validateName(this, value);
+        });
+
+        // Blur event to trim
+        nameInput.addEventListener('blur', function() {
+            this.value = this.value.trim().replace(/\s+/g, ' ');
+            validateName(this, this.value);
+        });
+
+        // Initial validation on load if there's a value
+        if (nameInput.value) {
+            validateName(nameInput, nameInput.value);
+        }
+    }
+
+    function validateName(input, value) {
+        const errorDiv = document.getElementById('nameError');
+        
+        if (!value) {
+            input.classList.remove('is-valid', 'is-invalid');
+            errorDiv.textContent = '';
+            errorDiv.className = 'validation-message';
+            return false;
+        }
+        
+        // Check if name contains only alphabets and spaces
+        const nameRegex = /^[a-zA-Z]+(?:\s[a-zA-Z]+)*$/;
+        
+        if (!nameRegex.test(value) || value.length < 2) {
+            input.classList.remove('is-valid');
+            input.classList.add('is-invalid');
+            errorDiv.textContent = 'Name must contain only letters and spaces (min 2 characters)';
+            errorDiv.className = 'validation-message error';
+            return false;
+        }
+        
+        input.classList.remove('is-invalid');
+        input.classList.add('is-valid');
+        errorDiv.textContent = '';
+        errorDiv.className = 'validation-message';
+        return true;
+    }
+
+    /**
+     * Pincode Field Validation
+     * - Allow only numbers
+     * - Must be exactly 6 digits
+     * - Validate Indian pincode format
+     */
+    const pincodeInput = document.getElementById('id_pincode');
+    if (pincodeInput) {
+        pincodeInput.addEventListener('input', function(e) {
+            // Remove all non-digit characters
+            let value = this.value.replace(/\D/g, '');
+            
+            // Limit to 6 digits
+            if (value.length > 6) {
+                value = value.slice(0, 6);
+            }
+            
+            this.value = value;
+            
+            // Validate and show message
+            validatePincode(this, value);
+        });
+
+        // Initial validation on load if there's a value
+        if (pincodeInput.value) {
+            validatePincode(pincodeInput, pincodeInput.value);
+        }
+    }
+
+    function validatePincode(input, value) {
+        const errorDiv = document.getElementById('pincodeError');
+        const validLength = 6;
+        
+        if (!value) {
+            input.classList.remove('is-valid', 'is-invalid');
+            errorDiv.textContent = '';
+            errorDiv.className = 'validation-message';
+            return false;
+        }
+        
+        if (value.length !== validLength) {
+            input.classList.remove('is-valid');
+            input.classList.add('is-invalid');
+            errorDiv.textContent = 'Pincode must be exactly ' + validLength + ' digits';
+            errorDiv.className = 'validation-message error';
+            return false;
+        }
+        
+        // Indian pincode validation (first digit should be 1-9)
+        const firstDigit = parseInt(value.charAt(0));
+        if (firstDigit < 1 || firstDigit > 9) {
+            input.classList.remove('is-valid');
+            input.classList.add('is-invalid');
+            errorDiv.textContent = 'Invalid Indian pincode format';
+            errorDiv.className = 'validation-message error';
+            return false;
+        }
+        
+        input.classList.remove('is-invalid');
+        input.classList.add('is-valid');
+        errorDiv.textContent = '';
+        errorDiv.className = 'validation-message';
+        return true;
+    }
+
+    // =====================================================
+    // STATE-DISTRICT DROPDOWN
+    // =====================================================
+
+    // Initialize district field on load
+    if (districtSelect) {
+        districtSelect.innerHTML = '<option value="">Select District</option>';
+        districtSelect.disabled = true;
+    }
+
+    // Handle State Change
+    if (stateSelect) {
+        stateSelect.addEventListener('change', function() {
+            const selectedState = this.value;
+            districtSelect.innerHTML = '<option value="">Select District</option>';
+
+            if (selectedState && stateDistrictMap[selectedState]) {
+                const districts = stateDistrictMap[selectedState];
+                districts.forEach(district => {
+                    const option = document.createElement('option');
+                    option.value = district;
+                    option.textContent = district;
+                    districtSelect.appendChild(option);
+                });
+                districtSelect.disabled = false;
+            } else {
+                districtSelect.disabled = true;
+            }
+        });
+    }
+
+    // =====================================================
+    // SIZE SELECTION
+    // =====================================================
+
+    if (sizeSelect) {
+        sizeSelect.addEventListener('change', function() {
+            const selectedSize = this.value;
+
+            if (selectedSize && sizeDescriptions[selectedSize]) {
+                const sizeData = sizeDescriptions[selectedSize];
+                document.querySelector('.size-info-title').textContent = sizeData.title;
+                document.querySelector('.size-info-desc').textContent = sizeData.description;
+                document.querySelector('.size-info-ideal').textContent = sizeData.ideal;
+                sizeInfo.style.display = 'block';
+            } else {
+                sizeInfo.style.display = 'none';
+            }
+            calculateTotalPrice();
+        });
+    }
+
+    // =====================================================
+    // PRICE CALCULATION
+    // =====================================================
+
+    const sizePrices = {
+        '8x10': 240,
+        '11x14': 270,
+        'A2': 250,
+        'A3': 350,
+        'A4': 300,
+        '16x20': 400,
+    };
+    const categoryPrices = {
+        'pen_art': 200,
+        'pencil': 500,
+        'stencil': 500,
+        'paintings': 500,
+        'ghibli_art': 350,
+        'caricature': 450,
+    };
+
+    function calculateTotalPrice() {
+        const selectedSize = sizeSelect ? sizeSelect.value : '';
+        const selectedCategory = document.getElementById('categorySelect') ? document.getElementById('categorySelect').value : '';
+
+        const sizePrice = sizePrices[selectedSize] || 0;
+        const categoryPrice = categoryPrices[selectedCategory] || 0;
+        const totalPrice = sizePrice + categoryPrice;
+
+        const totalPriceInput = document.getElementById('totalPriceInput');
+        if (totalPriceInput) {
+            totalPriceInput.value = totalPrice > 0 ? totalPrice : '';
+        }
+    }
+
+    // Handle Category Selection
+    const categorySelect = document.getElementById('categorySelect');
+    if (categorySelect) {
+        categorySelect.addEventListener('change', calculateTotalPrice);
+    }
+
+    // =====================================================
+    // FORM SUBMISSION VALIDATION
+    // =====================================================
+
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            let isValid = true;
+
+            // Validate all required fields
+            if (nameInput) {
+                const nameValid = validateName(nameInput, nameInput.value);
+                if (!nameValid) isValid = false;
+            }
+
+            if (phoneInput) {
+                const phoneValid = validatePhone(phoneInput, phoneInput.value);
+                if (!phoneValid) isValid = false;
+            }
+
+            if (pincodeInput) {
+                const pincodeValid = validatePincode(pincodeInput, pincodeInput.value);
+                if (!pincodeValid) isValid = false;
+            }
+
+            if (!isValid) {
+                e.preventDefault();
+                // Scroll to first error
+                const firstError = form.querySelector('.is-invalid');
+                if (firstError) {
+                    firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    firstError.focus();
+                }
+            }
+        });
+    }
+});
+</script>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

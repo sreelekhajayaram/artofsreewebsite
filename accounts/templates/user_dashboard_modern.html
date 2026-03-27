@@ -1,0 +1,1318 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!-- 
+    MODERN USER DASHBOARD - ArtOfSree
+    Maroon Theme - Clean & Minimal
+-->
+
+<style>
+    /* ===== CSS VARIABLES - Light Maroon Theme ===== */
+    :root {
+        --bg-dark: #fff5f5;
+        --bg-card: #ffffff;
+        --bg-sidebar: #ffeaea;
+        --bg-hover: #ffd6d6;
+        --border-subtle: #ffccc;
+        --border-light: #ffb3b3;
+        --text-primary: #4a0404;
+        --text-secondary: #7a3030;
+        --text-muted: #a35555;
+        --text-dark-muted: #c98080;
+        --maroon-primary: #b31d3d;
+        --maroon-dark: #8a152e;
+        --maroon-light: #d6336b;
+        --maroon-gold: #c9a227;
+        --shadow-soft: 0 4px 20px rgba(179, 29, 61, 0.15);
+        --shadow-hover: 0 8px 30px rgba(179, 29, 61, 0.25);
+        --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        --radius-sm: 8px;
+        --radius-md: 12px;
+        --radius-lg: 16px;
+    }
+
+    /* ===== RESET & BASE STYLES ===== */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        background: var(--bg-dark);
+        color: var(--text-primary);
+        min-height: 100vh;
+        overflow-x: hidden;
+    }
+
+    /* ===== DASHBOARD LAYOUT ===== */
+    .dashboard-wrapper {
+        display: flex;
+        min-height: 100vh;
+    }
+
+    /* ===== LEFT SIDEBAR ===== */
+    .sidebar {
+        width: 280px;
+        background: var(--bg-sidebar);
+        border-right: 1px solid var(--border-subtle);
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        z-index: 1000;
+        transition: var(--transition-smooth);
+    }
+
+    .sidebar-header {
+        padding: 2rem 1.5rem;
+        border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .sidebar-brand {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        text-decoration: none;
+        color: var(--text-primary);
+    }
+
+    .brand-icon {
+        width: 42px;
+        height: 42px;
+        background: linear-gradient(135deg, var(--maroon-primary) 0%, var(--maroon-dark) 100%);
+        border-radius: var(--radius-sm);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        color: #fff;
+        font-weight: 700;
+    }
+
+    .brand-text {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.4rem;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+    }
+
+    .sidebar-nav {
+        flex: 1;
+        padding: 1.5rem 0;
+        overflow-y: auto;
+    }
+
+    .nav-section {
+        margin-bottom: 1.5rem;
+    }
+
+    .nav-section-title {
+        padding: 0.5rem 1.5rem;
+        font-size: 0.7rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        color: var(--text-dark-muted);
+        margin-bottom: 0.5rem;
+    }
+
+    .nav-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 0.875rem 1.5rem;
+        color: var(--text-secondary);
+        text-decoration: none;
+        font-size: 0.95rem;
+        font-weight: 400;
+        transition: var(--transition-smooth);
+        border-left: 3px solid transparent;
+        position: relative;
+    }
+
+    .nav-item:hover {
+        background: var(--bg-hover);
+        color: var(--text-primary);
+    }
+
+    .nav-item.active {
+        background: var(--bg-hover);
+        color: var(--maroon-gold);
+        border-left-color: var(--maroon-gold);
+    }
+
+    .nav-item i {
+        width: 20px;
+        text-align: center;
+        font-size: 1.1rem;
+        opacity: 0.8;
+    }
+
+    .nav-item:hover i,
+    .nav-item.active i {
+        opacity: 1;
+        color: var(--maroon-gold);
+    }
+
+    .nav-badge {
+        margin-left: auto;
+        background: var(--maroon-primary);
+        color: #fff;
+        padding: 0.2rem 0.6rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 500;
+    }
+
+    .sidebar-footer {
+        padding: 1.5rem;
+        border-top: 1px solid var(--border-subtle);
+    }
+
+    .user-card {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem;
+        background: var(--bg-card);
+        border-radius: var(--radius-md);
+        border: 1px solid var(--border-subtle);
+    }
+
+    .user-avatar {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--maroon-primary) 0%, var(--maroon-dark) 100%);
+        border: 2px solid var(--maroon-gold);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 1rem;
+        color: #fff;
+        flex-shrink: 0;
+    }
+
+    .user-info {
+        overflow: hidden;
+    }
+
+    .user-name {
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: var(--text-primary);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .user-email {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    /* ===== MAIN CONTENT AREA ===== */
+    .main-content {
+        flex: 1;
+        margin-left: 280px;
+        min-height: 100vh;
+    }
+
+    /* ===== TOP BAR ===== */
+    .topbar {
+        background: var(--bg-sidebar);
+        border-bottom: 1px solid var(--border-subtle);
+        padding: 1rem 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        backdrop-filter: blur(10px);
+    }
+
+    .topbar-left {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .menu-toggle {
+        display: none;
+        background: none;
+        border: none;
+        color: var(--text-primary);
+        font-size: 1.5rem;
+        cursor: pointer;
+        padding: 0.5rem;
+    }
+
+    .page-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--text-primary);
+    }
+
+    .topbar-right {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+    }
+
+    .topbar-profile {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.5rem 1rem;
+        background: var(--bg-card);
+        border-radius: var(--radius-md);
+        border: 1px solid var(--border-subtle);
+        cursor: pointer;
+        transition: var(--transition-smooth);
+    }
+
+    .topbar-profile:hover {
+        border-color: var(--border-light);
+    }
+
+    .topbar-profile .avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--maroon-primary) 0%, var(--maroon-dark) 100%);
+        border: 1px solid var(--maroon-gold);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #fff;
+    }
+
+    .topbar-profile .name {
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: var(--text-primary);
+    }
+
+    /* ===== DASHBOARD CONTENT ===== */
+    .dashboard-content {
+        padding: 2rem;
+    }
+
+    /* ===== OVERVIEW CARDS ===== */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .stat-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border-subtle);
+        border-radius: var(--radius-md);
+        padding: 1.5rem;
+        transition: var(--transition-smooth);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .stat-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background: linear-gradient(90deg, var(--maroon-primary), var(--maroon-gold));
+        opacity: 0.8;
+    }
+
+    .stat-card:hover {
+        border-color: var(--border-light);
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-hover);
+    }
+
+    .stat-icon {
+        width: 48px;
+        height: 48px;
+        background: rgba(128, 0, 32, 0.2);
+        border-radius: var(--radius-sm);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1rem;
+        font-size: 1.25rem;
+        color: var(--maroon-gold);
+    }
+
+    .stat-value {
+        font-family: 'Playfair Display', serif;
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: 0.25rem;
+        line-height: 1;
+    }
+
+    .stat-label {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        font-weight: 400;
+    }
+
+    /* ===== SECTIONS ===== */
+    .section {
+        margin-bottom: 2rem;
+    }
+
+    .section-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1.5rem;
+    }
+
+    .section-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--text-primary);
+    }
+
+    .section-link {
+        font-size: 0.85rem;
+        color: var(--maroon-gold);
+        text-decoration: none;
+        transition: var(--transition-smooth);
+    }
+
+    .section-link:hover {
+        color: var(--maroon-light);
+        text-decoration: underline;
+    }
+
+    /* ===== PORTRAIT BOOKING STATUS ===== */
+    .booking-status-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+    }
+
+    .booking-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border-subtle);
+        border-radius: var(--radius-md);
+        padding: 1.5rem;
+        transition: var(--transition-smooth);
+    }
+
+    .booking-card:hover {
+        border-color: var(--border-light);
+        transform: translateY(-2px);
+    }
+
+    .booking-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+    }
+
+    .booking-id {
+        font-size: 0.8rem;
+        color: var(--maroon-gold);
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .booking-status {
+        padding: 0.35rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .status-pending {
+        background: rgba(128, 0, 32, 0.3);
+        color: #d0a0b0;
+        border: 1px solid var(--maroon-primary);
+    }
+
+    .status-confirmed {
+        background: var(--maroon-gold);
+        color: var(--bg-dark);
+    }
+
+    .status-completed {
+        background: var(--maroon-primary);
+        color: #fff;
+    }
+
+    .booking-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 0.75rem;
+    }
+
+    .booking-meta {
+        display: flex;
+        gap: 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .booking-meta-item {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .booking-meta-label {
+        font-size: 0.7rem;
+        color: var(--text-dark-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .booking-meta-value {
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+    }
+
+    /* Progress Bar */
+    .progress-track {
+        background: var(--bg-hover);
+        border-radius: 10px;
+        height: 6px;
+        overflow: hidden;
+        margin-top: 1rem;
+    }
+
+    .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--maroon-primary), var(--maroon-gold));
+        border-radius: 10px;
+        transition: width 0.5s ease;
+    }
+
+    .progress-steps {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 0.75rem;
+    }
+
+    .progress-step {
+        font-size: 0.65rem;
+        color: var(--text-dark-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .progress-step.active {
+        color: var(--maroon-gold);
+    }
+
+    /* ===== ORDERS TABLE ===== */
+    .table-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border-subtle);
+        border-radius: var(--radius-md);
+        overflow: hidden;
+    }
+
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .table th {
+        padding: 1rem 1.5rem;
+        text-align: left;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: var(--text-dark-muted);
+        background: var(--bg-hover);
+        border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .table td {
+        padding: 1rem 1.5rem;
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        border-bottom: 1px solid var(--border-subtle);
+        vertical-align: middle;
+    }
+
+    .table tr:last-child td {
+        border-bottom: none;
+    }
+
+    .table tr:hover td {
+        background: var(--bg-hover);
+    }
+
+    .order-id {
+        font-weight: 500;
+        color: var(--maroon-gold);
+    }
+
+    .order-product {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .product-thumb {
+        width: 48px;
+        height: 48px;
+        background: var(--bg-hover);
+        border-radius: var(--radius-sm);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text-dark-muted);
+        font-size: 1.25rem;
+    }
+
+    .product-info {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .product-name {
+        color: var(--text-primary);
+        font-weight: 500;
+    }
+
+    .product-category {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+    }
+
+    .price {
+        font-weight: 600;
+        color: var(--maroon-gold);
+    }
+
+    /* ===== EMPTY STATE ===== */
+    .empty-state {
+        text-align: center;
+        padding: 3rem;
+        background: var(--bg-card);
+        border: 1px solid var(--border-subtle);
+        border-radius: var(--radius-md);
+        color: var(--text-muted);
+    }
+
+    .empty-text {
+        font-size: 1.1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* ===== BUTTONS ===== */
+    .btn-primary-custom {
+        display: inline-block;
+        padding: 0.75rem 1.5rem;
+        background: linear-gradient(135deg, var(--maroon-primary) 0%, var(--maroon-dark) 100%);
+        color: #fff;
+        border: none;
+        border-radius: var(--radius-sm);
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition-smooth);
+        text-decoration: none;
+        font-size: 0.9rem;
+    }
+
+    .btn-primary-custom:hover {
+        background: linear-gradient(135deg, var(--maroon-light) 0%, var(--maroon-primary) 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(128, 0, 32, 0.4);
+        color: #fff;
+    }
+
+    /* ===== RESPONSIVE DESIGN ===== */
+    @media (max-width: 1024px) {
+        .sidebar { width: 260px; }
+        .main-content { margin-left: 260px; }
+    }
+
+    @media (max-width: 768px) {
+        .dashboard-wrapper { flex-direction: column; }
+        .sidebar { width: 100%; height: auto; position: relative; order: 2; display: none; }
+        .sidebar.show { display: block; }
+        .main-content { margin-left: 0; order: 1; }
+        .topbar { order: 3; }
+        .menu-toggle { display: block; }
+        .stats-grid { grid-template-columns: repeat(2, 1fr); }
+        .booking-status-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 576px) {
+        .dashboard-content { padding: 1rem; }
+        .stats-grid { grid-template-columns: 1fr; }
+        .section-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+        .topbar-profile .name { display: none; }
+    }
+    
+    /* ===== PORTRAIT PREVIEW SIMULATOR BUTTON ===== */
+    .btn-preview-simulator {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 0.6rem 1.2rem;
+        background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
+        color: #fff;
+        border: none;
+        border-radius: var(--radius-sm);
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition-smooth);
+        text-decoration: none;
+        font-size: 0.85rem;
+    }
+    
+    .btn-preview-simulator:hover {
+        background: linear-gradient(135deg, #a569c9 0%, #9b59b6 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(155, 89, 182, 0.4);
+        color: #fff;
+    }
+    
+    /* ===== MODAL STYLES ===== */
+    .preview-modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 9999;
+        justify-content: center;
+        align-items: center;
+        backdrop-filter: blur(5px);
+    }
+    
+    .preview-modal-overlay.active {
+        display: flex;
+    }
+    
+    .preview-modal {
+        background: var(--bg-card);
+        border-radius: var(--radius-lg);
+        width: 90%;
+        max-width: 600px;
+        max-height: 90vh;
+        overflow-y: auto;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        animation: modalSlideIn 0.3s ease;
+    }
+    
+    @keyframes modalSlideIn {
+        from {
+            opacity: 0;
+            transform: translateY(-30px) scale(0.95);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+    
+    .preview-modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.5rem;
+        border-bottom: 1px solid var(--border-subtle);
+    }
+    
+    .preview-modal-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .preview-modal-title i {
+        color: #9b59b6;
+    }
+    
+    .preview-modal-close {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        color: var(--text-muted);
+        cursor: pointer;
+        transition: var(--transition-smooth);
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .preview-modal-close:hover {
+        background: var(--bg-hover);
+        color: var(--text-primary);
+    }
+    
+    .preview-modal-body {
+        padding: 1.5rem;
+    }
+    
+    .preview-form-group {
+        margin-bottom: 1.5rem;
+    }
+    
+    .preview-form-label {
+        display: block;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--text-secondary);
+        margin-bottom: 0.5rem;
+    }
+    
+    .preview-form-select {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 1px solid var(--border-light);
+        border-radius: var(--radius-sm);
+        font-size: 0.95rem;
+        color: var(--text-primary);
+        background: var(--bg-card);
+        cursor: pointer;
+        transition: var(--transition-smooth);
+    }
+    
+    .preview-form-select:focus {
+        outline: none;
+        border-color: #9b59b6;
+        box-shadow: 0 0 0 3px rgba(155, 89, 182, 0.1);
+    }
+    
+    /* ===== PREVIEW CONTAINER ===== */
+    .preview-wrapper {
+        background: var(--bg-dark);
+        border-radius: var(--radius-md);
+        padding: 1.5rem;
+        text-align: center;
+        border: 1px solid var(--border-subtle);
+    }
+    
+    .preview-image-container {
+        display: inline-block;
+        overflow: hidden;
+        border-radius: var(--radius-sm);
+        transition: all 0.3s ease;
+    }
+    
+    .preview-image {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        transition: all 0.3s ease;
+    }
+    
+    /* ===== CATEGORY FILTER LOGIC ===== */
+    /* Caricature: Cartoon effect with high contrast and saturation */
+    .preview-image.category-caricature {
+        filter: contrast(120%) saturate(150%);
+        transform: scale(1.05);
+    }
+    
+    /* Pen Art: Blue tone effect using grayscale + sepia + hue rotation */
+    .preview-image.category-pen-art {
+        filter: grayscale(100%) sepia(100%) hue-rotate(200deg);
+    }
+    
+    /* Painting: No filter - natural colors */
+    .preview-image.category-painting {
+        filter: none;
+    }
+    
+    /* Pencil Drawing: Soft grayscale with slight contrast */
+    .preview-image.category-pencil-drawing {
+        filter: grayscale(100%) contrast(110%);
+    }
+    
+    /* Stencil Art: Strong black & white with high contrast */
+    .preview-image.category-stencil-art {
+        filter: grayscale(100%) contrast(200%);
+    }
+    
+    /* ===== FRAME BORDER LOGIC ===== */
+    /* Plastic Frame: Simple black border */
+    .preview-image-container.frame-plastic {
+        border: 5px solid black;
+    }
+    
+    /* Wooden Frame: Brown border */
+    .preview-image-container.frame-wooden {
+        border: 8px solid #8B4513;
+    }
+    
+    /* Metal Frame: Gray border */
+    .preview-image-container.frame-metal {
+        border: 6px solid gray;
+    }
+    
+    /* Premium Wooden: Dark brown with shadow */
+    .preview-image-container.frame-premium-wooden {
+        border: 10px solid #5C4033;
+        box-shadow: 0px 0px 15px rgba(0,0,0,0.5);
+    }
+    
+    /* Vintage Gold: Gold border with glow effect */
+    .preview-image-container.frame-vintage-gold {
+        border: 10px solid gold;
+        box-shadow: 0px 0px 20px rgba(218,165,32,0.6);
+    }
+    
+    /* Matte Black: Dark black border */
+    .preview-image-container.frame-matte-black {
+        border: 8px solid #111;
+    }
+    
+    /* ===== DARK MODE COMPATIBILITY ===== */
+    body.dark-mode .preview-modal {
+        background: #1e1e1e;
+        border-color: #333;
+    }
+    
+    body.dark-mode .preview-modal-header {
+        border-color: #333;
+    }
+    
+    body.dark-mode .preview-modal-title {
+        color: #e0e0e0;
+    }
+    
+    body.dark-mode .preview-form-label {
+        color: #aaa;
+    }
+    
+    body.dark-mode .preview-form-select {
+        background: #2d2d2d;
+        border-color: #444;
+        color: #e0e0e0;
+    }
+    
+    body.dark-mode .preview-wrapper {
+        background: #2d2d2d;
+        border-color: #333;
+    }
+    
+    /* ===== RESPONSIVE MODAL ===== */
+    @media (max-width: 576px) {
+        .preview-modal {
+            width: 95%;
+            max-height: 85vh;
+        }
+        
+        .preview-modal-header {
+            padding: 1rem;
+        }
+        
+        .preview-modal-body {
+            padding: 1rem;
+        }
+        
+        .preview-wrapper {
+            padding: 1rem;
+        }
+    }
+</style>
+
+<div class="dashboard-wrapper">
+    <!-- LEFT SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <a href="{% url 'home' %}" class="sidebar-brand">
+                <div class="brand-icon">A</div>
+                <div class="brand-text">ArtOfSree</div>
+            </a>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="nav-section">
+                <div class="nav-section-title">Dashboard</div>
+                <a href="#overview" class="nav-item active"><i class="fas fa-tachometer-alt"></i><span>Overview</span></a>
+                <a href="#orders" class="nav-item"><i class="fas fa-shopping-bag"></i><span>My Orders</span><span class="nav-badge">{{ orders|length }}</span></a>
+                <a href="#bookings" class="nav-item"><i class="fas fa-calendar-alt"></i><span>Portrait Bookings</span><span class="nav-badge">{{ bookings|length }}</span></a>
+            </div>
+            <div class="nav-section">
+                <div class="nav-section-title">Account</div>
+                <a href="{% url 'logout' %}" class="nav-item"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a>
+            </div>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="user-card">
+                <div class="user-avatar">{{ user.first_name|slice:":1"|upper|default:"U" }}</div>
+                <div class="user-info">
+                    <div class="user-name">{{ user.first_name|default:user.username }}</div>
+                    <div class="user-email">{{ user.email }}</div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="menu-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+                <h1 class="page-title">Dashboard</h1>
+            </div>
+            <div class="topbar-right">
+                <div class="topbar-profile">
+                    <div class="avatar">{{ user.first_name|slice:":1"|upper|default:"U" }}</div>
+                    <div class="name">{{ user.first_name|default:user.username }}</div>
+                </div>
+            </div>
+        </header>
+
+        <div class="dashboard-content">
+            <!-- OVERVIEW STATS -->
+            <section class="section" id="overview">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-shopping-bag"></i></div>
+                        <div class="stat-value">{{ orders|length }}</div>
+                        <div class="stat-label">Total Orders</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-calendar-alt"></i></div>
+                        <div class="stat-value">{{ bookings|length }}</div>
+                        <div class="stat-label">Portrait Bookings</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-rupee-sign"></i></div>
+                        <div class="stat-value">₹ {{ total_spent }}</div>
+                        <div class="stat-label">Total Spent</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PORTRAIT BOOKING STATUS -->
+            <section class="section" id="bookings">
+                <div class="section-header">
+                    <h2 class="section-title">Portrait Booking Status</h2>
+                    <div>
+                        {% if bookings %}
+                        <a href="javascript:void(0)" class="btn-preview-simulator" onclick="openPreviewModal()">
+                            <i class="fas fa-palette"></i> View Portrait Preview Simulator
+                        </a>
+                        {% endif %}
+                        <a href="{% url 'booking' %}" class="section-link" style="margin-left: {% if bookings %}15px{% else %}0{% endif %};">Book New Portrait</a>
+                    </div>
+                </div>
+                {% if bookings %}
+                <div class="booking-status-grid">
+                    {% for booking in bookings %}
+                    <div class="booking-card">
+                        <div class="booking-header">
+                            <div class="booking-id">#{{ booking.id }}</div>
+                            <div class="booking-status {% if booking.get_booking_status_display == 'Confirmed' %}status-confirmed{% elif booking.get_booking_status_display == 'Completed' %}status-completed{% else %}status-pending{% endif %}">{{ booking.get_booking_status_display }}</div>
+                        </div>
+                        <h3 class="booking-title">{{ booking.category }}</h3>
+                        <div class="booking-meta">
+                            <div class="booking-meta-item">
+                                <div class="booking-meta-label">Size</div>
+                                <div class="booking-meta-value">{{ booking.size }}</div>
+                            </div>
+                            <div class="booking-meta-item">
+                                <div class="booking-meta-label">Date</div>
+                                <div class="booking-meta-value">{{ booking.preferred_date|default:"TBD" }}</div>
+                            </div>
+                        </div>
+                        <div class="progress-track">
+                            <div class="progress-fill" style="width: {% if booking.get_booking_status_display == 'Completed' %}100{% elif booking.get_booking_status_display == 'Confirmed' %}60{% else %}20{% endif %}%"></div>
+                        </div>
+                        <div class="progress-steps">
+                            <span class="progress-step {% if booking.get_booking_status_display in 'Pending,Confirmed,Completed' %}active{% endif %}">Ordered</span>
+                            <span class="progress-step {% if booking.get_booking_status_display in 'Confirmed,Completed' %}active{% endif %}">Confirmed</span>
+                            <span class="progress-step {% if booking.get_booking_status_display == 'Completed' %}active{% endif %}">Completed</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="empty-state">
+                    <p class="empty-text">No portrait bookings yet. Create your first custom portrait!</p>
+                    <a href="{% url 'booking' %}" class="btn-primary-custom">Book Portrait</a>
+                </div>
+                {% endif %}
+            </section>
+
+            <!-- ARTWORK PURCHASE HISTORY -->
+            <section class="section" id="orders">
+                <div class="section-header">
+                    <h2 class="section-title">Artwork Purchase History</h2>
+                    <a href="{% url 'home' %}" class="section-link">Browse Artworks</a>
+                </div>
+                {% if orders %}
+                <div class="table-card">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Artwork</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order in orders %}
+                            <tr>
+                                <td><div class="order-id">#{{ order.id }}</div></td>
+                                <td>
+                                    <div class="order-product">
+                                        <div class="product-thumb"><i class="fas fa-image"></i></div>
+                                        <div class="product-info">
+                                            <div class="product-name">Order Summary</div>
+                                            <div class="product-category">{{ order.items.count }} items</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>{{ order.created_at|date:"M d, Y" }}</td>
+                                <td><span class="booking-status {% if order.get_order_status_display == 'Completed' %}status-completed{% elif order.get_order_status_display == 'Confirmed' %}status-confirmed{% else %}status-pending{% endif %}">{{ order.get_order_status_display }}</span></td>
+                                <td><div class="price">₹ {{ order.total_price }}</div></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="empty-state">
+                    <p class="empty-text">No orders yet. Start your art collection today!</p>
+                    <a href="{% url 'home' %}" class="btn-primary-custom">Shop Artworks</a>
+                </div>
+                {% endif %}
+            </section>
+        </div>
+    </main>
+</div>
+
+<!-- ============================================================ -->
+<!-- PORTRAIT PREVIEW SIMULATOR MODAL -->
+<!-- ============================================================ -->
+<div class="preview-modal-overlay" id="previewModal">
+    <div class="preview-modal">
+        <div class="preview-modal-header">
+            <h3 class="preview-modal-title">
+                <i class="fas fa-palette"></i> Portrait Preview Simulator
+            </h3>
+            <button class="preview-modal-close" onclick="closePreviewModal()" aria-label="Close modal">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="preview-modal-body">
+            <!-- Category Dropdown -->
+            <div class="preview-form-group">
+                <label for="categorySelect" class="preview-form-label">
+                    <i class="fas fa-artstation mr-2"></i>Category
+                </label>
+                <select id="categorySelect" class="preview-form-select">
+                    <option value="painting" selected>Painting</option>
+                    <option value="caricature">Caricature</option>
+                    <option value="pen-art">Pen Art</option>
+                    <option value="pencil-drawing">Pencil Drawing</option>
+                    <option value="stencil-art">Stencil Art</option>
+                </select>
+            </div>
+            
+            <!-- Frame Type Dropdown -->
+            <div class="preview-form-group">
+                <label for="frameSelect" class="preview-form-label">
+                    <i class="fas fa-border-all mr-2"></i>Frame Type
+                </label>
+                <select id="frameSelect" class="preview-form-select">
+                    <option value="plastic" selected>Plastic</option>
+                    <option value="wooden">Wooden</option>
+                    <option value="metal">Metal</option>
+                    <option value="premium-wooden">Premium Wooden</option>
+                    <option value="vintage-gold">Vintage Gold</option>
+                    <option value="matte-black">Matte Black</option>
+                </select>
+            </div>
+            
+            <!-- Preview Container -->
+            <div class="preview-wrapper">
+                <div class="preview-image-container" id="previewImageContainer">
+                    <!-- Placeholder portrait image - using a sample image from picsum -->
+                    <img src="https://picsum.photos/seed/portrait/400/500" 
+                         alt="Portrait Preview" 
+                         class="preview-image" 
+                         id="previewImage">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function toggleSidebar(){
+    document.getElementById('sidebar').classList.toggle('show');
+}
+document.querySelectorAll('.nav-item[href^="#"]').forEach(function(link){
+    link.addEventListener('click',function(e){
+        e.preventDefault();
+        var t=document.querySelector(this.getAttribute('href'));
+        if(t)t.scrollIntoView({behavior:'smooth'});
+        document.querySelectorAll('.nav-item').forEach(function(i){i.classList.remove('active')});
+        this.classList.add('active')
+    })
+});
+document.addEventListener('click',function(e){
+    if(window.innerWidth<=768&&!document.getElementById('sidebar').contains(e.target)&&!document.querySelector('.menu-toggle').contains(e.target))
+        document.getElementById('sidebar').classList.remove('show')
+});
+
+// ============================================================
+// LIVE PORTRAIT PREVIEW SIMULATOR
+// ============================================================
+
+/**
+ * Open the preview modal
+ */
+function openPreviewModal() {
+    const modal = document.getElementById('previewModal');
+    if (modal) {
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+/**
+ * Close the preview modal
+ */
+function closePreviewModal() {
+    const modal = document.getElementById('previewModal');
+    if (modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+}
+
+// Close modal when clicking outside
+document.addEventListener('click', function(e) {
+    const modal = document.getElementById('previewModal');
+    if (modal && e.target === modal) {
+        closePreviewModal();
+    }
+});
+
+// Close modal with Escape key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closePreviewModal();
+    }
+});
+
+/**
+ * Apply category filter effect to preview image
+ * CATEGORY FILTER LOGIC:
+ * - Caricature: contrast(120%) saturate(150%) + scale(1.05) for cartoon effect
+ * - Pen Art: grayscale(100%) sepia(100%) hue-rotate(200deg) for blue tone
+ * - Painting: no filter (natural colors)
+ * - Pencil Drawing: grayscale(100%) contrast(110%) for soft gray
+ * - Stencil Art: grayscale(100%) contrast(200%) for strong B&W
+ */
+function applyCategoryFilter(category) {
+    const previewImage = document.getElementById('previewImage');
+    if (!previewImage) return;
+    
+    // Remove all category classes first
+    previewImage.classList.remove(
+        'category-caricature',
+        'category-pen-art',
+        'category-painting',
+        'category-pencil-drawing',
+        'category-stencil-art'
+    );
+    
+    // Add the selected category class
+    if (category && category !== 'painting') {
+        const className = 'category-' + category.toLowerCase().replace(/\s+/g, '-');
+        previewImage.classList.add(className);
+    }
+}
+
+/**
+ * Apply frame border style to preview container
+ * FRAME BORDER LOGIC:
+ * - Plastic: 5px solid black
+ * - Wooden: 8px solid #8B4513
+ * - Metal: 6px solid gray
+ * - Premium Wooden: 10px solid #5C4033 + box-shadow
+ * - Vintage Gold: 10px solid gold + gold glow
+ * - Matte Black: 8px solid #111
+ */
+function applyFrameStyle(frameType) {
+    const previewContainer = document.getElementById('previewImageContainer');
+    if (!previewContainer) return;
+    
+    // Remove all frame classes first
+    previewContainer.classList.remove(
+        'frame-plastic',
+        'frame-wooden',
+        'frame-metal',
+        'frame-premium-wooden',
+        'frame-vintage-gold',
+        'frame-matte-black'
+    );
+    
+    // Add the selected frame class
+    if (frameType) {
+        const className = 'frame-' + frameType.toLowerCase().replace(/\s+/g, '-');
+        previewContainer.classList.add(className);
+    }
+}
+
+// Add event listeners for dropdown changes
+document.addEventListener('DOMContentLoaded', function() {
+    const categorySelect = document.getElementById('categorySelect');
+    const frameSelect = document.getElementById('frameSelect');
+    
+    if (categorySelect) {
+        categorySelect.addEventListener('change', function() {
+            applyCategoryFilter(this.value);
+        });
+    }
+    
+    if (frameSelect) {
+        frameSelect.addEventListener('change', function() {
+            applyFrameStyle(this.value);
+        });
+    }
+});
+</script>
+
+{% endblock %}
+

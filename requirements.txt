@@ -1,0 +1,9 @@
+Django>=5.0,<5.1
+djangorestframework>=3.16
+reportlab>=4.4
+Pillow>=10.0
+psycopg2-binary>=2.9
+dj-database-url>=0.5
+django-widget-tweaks>=1.4
+django-storages[aws]==1.15.3
+boto3==1.35.24
