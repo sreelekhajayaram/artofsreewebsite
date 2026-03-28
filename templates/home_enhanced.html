@@ -108,9 +108,8 @@
                 <div class="artistic-gallery-card">
                     <div class="artistic-card-inner">
                         <div class="artistic-card-front">
-                            {% if product.images.first %}
                             <div class="artistic-card-image">
-                                <img src="{{ product.images.first.image.url }}" alt="{{ product.title }}" class="artistic-image">
+                                <img src="{% if product.images.first %}{{ product.images.first.image.url }}{% else %}https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop{% endif %}" alt="{{ product.title }}" class="artistic-image">
                                 <div class="artistic-overlay">
                                     <div class="artistic-overlay-content">
                                         <i class="fas fa-eye artistic-icon"></i>
@@ -118,14 +117,6 @@
                                     </div>
                                 </div>
                             </div>
-                            {% else %}
-                            <div class="artistic-card-image no-image">
-                                <div class="no-image-placeholder">
-                                    <i class="fas fa-image"></i>
-                                    <span>No Image</span>
-                                </div>
-                            </div>
-                            {% endif %}
                         </div>
                         <div class="artistic-card-back">
                             <div class="artistic-card-content">

@@ -3,9 +3,8 @@
 <div class="row">
     <div class="col-md-6">
         <div id="main-image" class="mb-3 text-center">
-            {% if product.images.first %}
-                <img id="slideshow-main" class="img-fluid rounded shadow-sm" src="{{ product.images.first.image.url }}" alt="{{ product.title }}" style="max-height:420px;object-fit:contain;" />
-            {% endif %}
+                <img id="slideshow-main" class="img-fluid rounded shadow-sm" src="{% if product.images.first %}{{ product.images.first.image.url }}{% else %}https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&h=500&fit=crop{% endif %}" alt="{{ product.title|default:'Art' }}" style="max-height:420px;object-fit:contain;" />
+
         </div>
         <div class="d-flex flex-wrap">
             {% for img in product.images.all %}
