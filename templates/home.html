@@ -105,8 +105,13 @@
         {% for product in products %}
         <div class="col-md-4 mb-4">
             <div class="card h-100 shadow-sm">
-                <img src="{% if product.images.first %}{{ product.images.first.image.url }}{% else %}https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=300&h=200&fit=crop{% endif %}" class="card-img-top" alt="{{ product.title }}" style="height: 200px; object-fit: cover;">
-
+                {% if product.images.first %}
+                <img src="{{ product.images.first.image.url }}" class="card-img-top" alt="{{ product.title }}" style="height: 200px; object-fit: cover;">
+                {% else %}
+                <div class="d-flex align-items-center justify-content-center bg-secondary text-white" style="height: 200px;">
+                    No Image
+                </div>
+                {% endif %}
                 <div class="card-body">
                     <h5 class="card-title">{{ product.title }}</h5>
                     <p class="card-text text-muted">{{ product.description|truncatewords:20 }}</p>

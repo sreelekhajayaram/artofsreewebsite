@@ -64,9 +64,8 @@ def home(request):
 
 def category_view(request, slug):
     category = get_object_or_404(Category, slug=slug)
-    products = category.products.prefetch_related('images').all()
+    products = category.products.all()
     return render(request, 'category.html', {'category': category, 'products': products})
-
 
 
 def product_detail(request, slug):
