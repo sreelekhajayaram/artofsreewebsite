@@ -4,34 +4,69 @@
 * {
     text-shadow: none !important;
 }
+.hero-atelier {
+    border-bottom-left-radius: 50px !important;
+    border-bottom-right-radius: 50px !important;
+    overflow: hidden !important;
+    background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%) !important;
+    padding: 30px 0 !important;
+    margin-bottom: 40px !important;
+    max-width: 90% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
 .hero-atelier h2 {
-    color: #000 !important;
+    color: #fff !important;
+    transition: all 0.3s ease;
+    font-family: 'Great Vibes', cursive !important;
+    font-size: 2.2rem !important;
+}
+.hero-atelier h2:hover {
+    color: #ccc !important;
+    text-shadow: none !important;
+    transform: scale(1.05);
 }
 .category-description {
-    color: black !important;
-    font-family: cursive !important;
+    color: #fff !important;
+    font-family: 'Great Vibes', cursive !important;
+    font-size: 1.2rem !important;
+    transition: all 0.3s ease;
+}
+.category-description:hover {
+    color: #ccc !important;
+}
+.product-card {
+    border-radius: 20px !important;
+    border: 2px solid transparent !important;
+    background: linear-gradient(white, #FFF8DC) !important;
+    transition: all 0.3s ease !important;
+}
+.product-card:hover {
+    border-color: #FFD700 !important;
+    box-shadow: 0 10px 30px rgba(255,215,0,0.4) !important;
+    transform: translateY(-5px) !important;
 }
 .artistic-btn {
-    background: #000 !important;
-    color: white !important;
+    background: #FFD700 !important;
+    color: #000 !important;
     padding: 6px 12px;
     border-radius: 5px;
     text-decoration: none;
     font-size: 0.8rem;
     transition: background 0.3s ease, color 0.3s ease;
-
 }
 .artistic-btn:hover {
-    background: #000 !important;
-    color: white !important;
+    background: #FFED4A !important;
+    color: #000 !important;
+    box-shadow: 0 0 10px rgba(255,215,0,0.6) !important;
 }
 </style>
 <div class="hero-atelier mb-4">
     <div class="row align-items-center">
         <div class="col-12">
             <p class="eyebrow text-light">Category</p>
-            <h2 class="text-white mb-1">{{ category.get_name_display }}</h2>
-            <p class="text-light mb-0 category-description">{{ category.description }}</p>
+            <h2 class="mb-1" style="color: #fff !important; font-family: 'Great Vibes', cursive !important; font-size: 2.2rem !important;">{{ category.get_name_display }}</h2>
+            <p class="mb-0 category-description" style="color: #fff !important; font-family: 'Great Vibes', cursive !important; font-size: 1.2rem !important;">{{ category.description }}</p>
         </div>
     </div>
 </div>
@@ -43,16 +78,16 @@
                     <img class="card-img-top product-img" src="{{ product.images.first.image.url }}" alt="{{ product.title }}">
                 {% endif %}
                 <div class="card-body d-flex flex-column">
-                    <h5 class="card-title product-h">{{ product.title }}</h5>
-                    <p class="card-text text-muted p-text">{{ product.description|truncatewords:25 }}</p>
+<h5 class="card-title product-h" style="color: black !important;">{{ product.title }}</h5>
+                    <p class="card-text text-muted p-text" style="color: black !important;">{{ product.description|truncatewords:25 }}</p>
                     {% if product.size %}
-                    <p class="card-text small text-muted">Size: {{ product.size }}</p>
+                    <p class="card-text small text-muted" style="color: black !important;">Size: {{ product.size }}</p>
                     {% endif %}
-                    <p class="font-weight-bold">₹ {{ product.price }}</p>
+                    <p class="font-weight-bold" style="color: black !important;">₹ {{ product.price }}</p>
                     {% if product.stock == 0 %}
                     <p class="small text-danger font-weight-bold">Out of Stock</p>
                     {% else %}
-                    <p class="small text-muted">Stock: {{ product.stock }}</p>
+                    <p class="small text-muted" style="color: black !important;">Stock: {{ product.stock }}</p>
                     {% endif %}
                     <a href="{% url 'product_detail' product.slug %}" class="btn btn-outline-primary mt-auto openproduct-btn">View Product</a>
                 </div>

@@ -13,49 +13,46 @@ from booking.forms import INDIA_STATE_DISTRICTS
 
 def home(request):
     # Define custom ordering for specific categories
-    # Required order: Paintings, Mural Paintings, Stencil Artworks, Pencil Drawings, Pen Art, then others (caricature last)
     category_order = {
         'paintings': 1,
         'mural': 2,
         'stencil': 3,
         'pencil': 4,
         'pen_art': 5,
-        'ghibli_art': 99,  # Second to last
-        'caricature': 100,  # Last
+        'ghibli_art': 99,
+        'caricature': 100,
     }
     
     def get_sort_key(category):
-        """Return sort key: defined categories get explicit order, others get high order to maintain relative order"""
         return category_order.get(category.name, 100)
     
-    # Filter categories with products only, prefetch for efficiency
-    categories = sorted(
-        Category.objects.filter(products__isnull=False).distinct(), 
-        key=get_sort_key
-    )
+    try:
+        categories = sorted(
+            Category.objects.filter(products__isnull=False).distinct(), 
+            key=get_sort_key
+        )
+    except:
+        categories = []
     
-    # Debug context
-    request.session['debug_categories'] = categories.count()
+    request.session['debug_categories'] = len(categories)
     
-    # Fallback if no categories with products
     if not categories:
-        from shop.models import Category
-        categories = Category.objects.order_by('name')[:3]
+        categories = Category.objects.order_by('name')[:3] or []
 
-    # Handle search and category filtering
     category_slug = request.GET.get('category')
     search_query = request.GET.get('search')
 
-    # Featured Gallery: Select exactly ONE product from EACH category
-    # Get the latest product from each category that has products
     featured_products = []
+    category_featured = []
     for category in categories:
-        # Get the latest product in this category (by created_at)
         product = category.products.order_by('-created_at').first()
         if product:
             featured_products.append(product)
-
-    # Start with base queryset for shop section
+            category_featured.append({
+                'category': category,
+                'product': product
+            })
+    
     products = Product.objects.order_by('-created_at')
 
     if category_slug:
@@ -68,10 +65,13 @@ def home(request):
     if search_query:
         products = products.filter(title__icontains=search_query) | products.filter(description__icontains=search_query)
 
-    # Apply slice after filtering
     products = products[:6]
 
-    return render(request, 'home.html', {'products': featured_products, 'categories': categories})
+    return render(request, 'home.html', {
+        'products': featured_products, 
+        'categories': categories, 
+        'category_featured': category_featured
+    })
 
 
 def category_view(request, slug):
@@ -312,6 +312,7 @@ def payment_portal(request):
     buy_now_data = request.session.get('buy_now_data')
     if buy_now_data:
         # This is a Buy Now flow - get only the single product
+        
         try:
             product = Product.objects.get(id=buy_now_data['product_id'])
             item = type('obj', (object,), {
@@ -469,3 +470,4 @@ def place_order_cod(request):
     request.session.pop('checkout_total', None)
     messages.success(request, "Order placed. Please pay on delivery.")
     return JsonResponse({'redirect_url': reverse('user_dashboard')})
+

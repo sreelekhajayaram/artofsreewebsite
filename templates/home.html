@@ -79,8 +79,24 @@
 .overlay-content {
   color: white;
   text-align: center;
-  transform: translateY(20px);
-  transition: transform 0.3s ease;
+  transform: translateY(30px);
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  padding: 30px;
+  max-width: 90%;
+}
+
+.overlay-content h5 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 0 0 10px 0;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+}
+
+.overlay-content p {
+  font-size: 1rem;
+  margin: 0;
+  opacity: 0.9;
+  line-height: 1.4;
 }
 
 .card-inner:hover .overlay-content {
@@ -149,18 +165,19 @@
 }
 </style>
 <style>
-/* Professional Enhanced Hero Section - Blue Card Design */
+/* Black Card Hero Section - ArtOfSree Premium Design */
 .hero-atelier {
-    background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+    background: linear-gradient(135deg, #000000 0%, #111111 50%, #1a1a1a 100%);
     border-radius: 30px;
     padding: 60px 40px;
     margin: 20px 0;
     box-shadow: 
-        0 25px 50px rgba(12, 48, 88, 0.4),
-        0 0 0 1px rgba(255, 255, 255, 0.05),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        0 25px 50px rgba(0, 0, 0, 0.6),
+        0 0 0 1px rgba(255, 215, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
     position: relative;
     overflow: hidden;
+    border: 1px solid rgba(255, 215, 0, 0.1);
 }
 
 .hero-atelier::after {
@@ -170,7 +187,7 @@
     left: -50%;
     width: 200%;
     height: 200%;
-    background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+    background: linear-gradient(45deg, transparent, rgba(255, 215, 0, 0.1), transparent);
     animation: shine 3s infinite;
     pointer-events: none;
 }
@@ -187,28 +204,32 @@
     left: 0;
     right: 0;
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.4), transparent);
 }
 
 .hero-atelier .eyebrow {
     font-size: 1.1rem;
     letter-spacing: 3px;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    color: #FFD700 !important;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+    font-weight: 600;
 }
 
 .hero-atelier h1 {
     font-size: 3.5rem;
     font-weight: 700;
+    color: #ffffff !important;
     text-shadow: 
-        0 4px 8px rgba(0,0,0,0.4),
-        0 0 20px rgba(173, 216, 230, 0.3);
+        0 4px 8px rgba(0,0,0,0.8),
+        0 0 20px rgba(255, 255, 255, 0.2);
     line-height: 1.1;
     margin-bottom: 20px;
 }
 
 .hero-atelier .lead {
     font-size: 1.3rem;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    color: #f0f0f0 !important;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.8);
     margin-bottom: 30px;
 }
 
@@ -217,13 +238,13 @@
     font-size: 1.1rem;
     border-radius: 50px;
     text-shadow: none;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.5);
     transition: all 0.3s ease;
 }
 
 .hero-atelier .btn:hover {
     transform: translateY(-3px);
-    box-shadow: 0 12px 35px rgba(0,0,0,0.4);
+    box-shadow: 0 12px 35px rgba(0,0,0,0.7);
 }
 
 @media (max-width: 768px) {
@@ -353,7 +374,7 @@
                 <div class="card-body d-flex flex-column">
                     <h5 class="card-title">{{ product.title }}</h5>
                     <p class="card-text product-description">{{ product.description|truncatewords:20 }}</p>
-                    <p class="card-text"><strong>₹ {{ product.price }}</strong></p>
+<p class="card-text"><strong style="color: white !important;">₹ {{ product.price }}</strong></p>
                     <div class="mt-auto"></div>
                 </div>
                 <div class="card-footer bg-white">
@@ -372,67 +393,123 @@
 </section>
 
 <section id="shop" class="mb-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="h4 section-header">Shop by Category</h2>
-    </div>
-    <div class="mb-4">
-        <form method="get" class="form-inline">
-            <div class="form-group mr-3">
-                <label for="category_filter" class="mr-2">Filter by Category:</label>
-                <select name="category" id="category_filter" class="form-control" onchange="this.form.submit()">
-                    <option value="">All Categories</option>
-                    {% for cat in categories %}
-                    <option value="{{ cat.slug }}" {% if request.GET.category == cat.slug %}selected{% endif %}>{{ cat.get_name_display }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="form-group">
-                <input type="text" name="search" class="form-control" placeholder="Search products..." value="{{ request.GET.search }}">
-                <button type="submit" class="btn btn-primary ml-2">Search</button>
-            </div>
-        </form>
-    </div>
-        <div class="row gx-4 gy-4">
-        {% for cat in categories %}
-        <div class="col-lg-4 col-md-6 col-sm-12">
-            <div class="card h-100 shadow-sm border-0 artistic-gallery-card">
-                <div class="card-inner">
-                    <div class="card-front">
-                        {% if cat.image %}
-                        <img src="{{ cat.image.url }}" alt="{{ cat.get_name_display }}" class="card-img-top artistic-image" style="height: 240px; object-fit: cover;">
-                        <div class="overlay">
-                            <div class="overlay-content">
-                                <i class="fas fa-eye"></i>
-                                <span>Explore</span>
-                            </div>
-                        </div>
-                        {% else %}
-                        <div class="no-image" style="height: 240px;">
-                            <i class="fas fa-image fa-3x text-muted"></i>
-                        </div>
-                        {% endif %}
+<h2 class="h4 section-header mb-4">Shop by Category</h2>
+
+
+    <div class="horizontal-categories" id="categoryScroll" style="display: flex !important; flex-direction: row !important; flex-wrap: nowrap !important; overflow-x: auto; gap: 20px; padding: 20px 0; scroll-snap-type: x mandatory; scrollbar-width: thin; -webkit-overflow-scrolling: touch;">
+        <button class="carousel-btn prev-btn" onclick="scrollCategories(-1)">❮</button>
+        {% for feat in category_featured %}
+        <a href="{% url 'category_detail' feat.category.slug %}" class="category-link" data-slug="{{ feat.category.slug }}">
+        <div class="category-card flex-shrink-0" style="width: 300px; max-width: 300px; scroll-snap-align: start; background: white; border-radius: 16px; box-shadow: 0 8px 25px rgba(0,0,0,0.1); overflow: hidden; transition: all 0.3s ease;" data-category-name="{{ feat.category.name }}" data-category-desc="{{ feat.category.description|default:feat.product.description|default:'Unique artworks' |truncatewords:15 }}">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="category-image-container">
+                    {% if feat.product.images.first %}
+                    <img src="{{ feat.product.images.first.image.url }}" alt="{{ feat.category.name }}" class="category-image">
+                    {% else %}
+                    <div class="no-image" style="height: 240px;">
+                        <i class="fas fa-image fa-3x text-muted"></i>
                     </div>
-                    <div class="card-back">
-                        <div class="card-body p-4">
-                            <h5 class="fw-bold text-dark mb-2">{{ cat.get_name_display }}</h5>
-                            <p class="text-dark lh-sm small mb-3 flex-grow-1">
-                                {{ cat.description|default:"Unique artworks await"|truncatewords:15 }}
-                            </p>
-                            <a href="{% url 'category_detail' cat.slug %}" class="btn btn-primary rounded-pill w-100">View {{ cat.products.count }} items</a>
-                        </div>
+                    {% endif %}
+                </div>
+                <div class="category-overlay">
+                    <div class="category-overlay-content">
+<h5 class="category-overlay-title">{{ feat.category.name }}</h5>
+
                     </div>
                 </div>
             </div>
         </div>
-        {% empty %}
-        <div class="col-12 text-center py-5">
-            <i class="fas fa-th fa-3x text-muted mb-3"></i>
-            <h4 class="text-muted">No categories available yet</h4>
-            <p class="text-muted">New artistic categories coming soon!</p>
-        </div>
+        </a>
         {% endfor %}
+        <button class="carousel-btn next-btn" onclick="scrollCategories(1)">❯</button>
     </div>
+    <style>
+    /* Horizontal Category Carousel Enhancements */
+    .horizontal-categories {
+        position: relative;
+    }
+    .carousel-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(0,0,0,0.5);
+        color: white;
+        border: none;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        font-size: 20px;
+        cursor: pointer;
+        z-index: 10;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .carousel-btn:hover {
+        background: rgba(0,0,0,0.8);
+        transform: translateY(-50%) scale(1.1);
+    }
+    .prev-btn {
+        left: 10px;
+    }
+    .next-btn {
+        right: 10px;
+    }
+    /* Hide scrollbar for clean look */
+    .horizontal-categories::-webkit-scrollbar {
+        height: 6px;
+    }
+    .horizontal-categories::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+    .horizontal-categories::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 3px;
+    }
+    .horizontal-categories::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+@media (max-width: 768px) {
+        .category-card {
+            width: 280px !important;
+            max-width: 280px !important;
+        }
+        .carousel-btn {
+            width: 40px;
+            height: 40px;
+            font-size: 16px;
+        }
+    }
+
+    /* UPPERCASE SHOP CATEGORY TEXT STYLING */
+    .category-overlay-title {
+      font-family: 'Playfair Display', 'cursive', serif !important;
+      text-transform: uppercase !important;
+      font-weight: 700 !important;
+      letter-spacing: 1.5px !important;
+      line-height: 1.3 !important;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.5) !important;
+    }
+    .category-overlay-title {
+      font-size: 1.4rem !important;
+      margin-bottom: 10px !important;
+    }
+    .category-overlay-desc {
+      font-size: 1rem !important;
+    }
+    @media (max-width: 768px) {
+      .category-overlay-title {
+        font-size: 1.2rem !important;
+      }
+      .category-overlay-desc {
+        font-size: 0.9rem !important;
+      }
+    }
+    </style>
+
 </section>
+
 
 {% comment %}
 =================================================================
@@ -696,8 +773,66 @@ It includes:
         }
     }
 
-    // Automatic slideshow for featured gallery cards
-    document.addEventListener('DOMContentLoaded', function() {
+        // Category card hover enhancement - populate overlay title/desc and click handling
+        document.addEventListener('DOMContentLoaded', function() {
+            const categoryCards = document.querySelectorAll('.category-card');
+            categoryCards.forEach(card => {
+                const titleEl = card.querySelector('.category-overlay-title');
+                const descEl = card.querySelector('.category-overlay-desc');
+                if (titleEl && descEl) {
+                    titleEl.textContent = card.dataset.categoryName;
+                    descEl.textContent = card.dataset.categoryDesc;
+                }
+            });
+            // Prevent scroll buttons from interfering with card clicks
+            const scrollBtns = document.querySelectorAll('.carousel-btn');
+            scrollBtns.forEach(btn => {
+                btn.addEventListener('click', (e) => e.stopPropagation());
+            });
+
+        // Horizontal Category Carousel Functionality
+        window.scrollCategories = function(direction) {
+            const container = document.getElementById('categoryScroll');
+            const cardWidth = 320; // card width + gap
+            const scrollAmount = direction * cardWidth;
+            container.scrollBy({
+                left: scrollAmount,
+                behavior: 'smooth'
+            });
+        }
+
+        // Auto-scroll every 5 seconds (optional)
+        let autoScrollInterval;
+        const container = document.getElementById('categoryScroll');
+        if (container) {
+            autoScrollInterval = setInterval(() => {
+                scrollCategories(1);
+            }, 5000);
+            container.addEventListener('mouseenter', () => clearInterval(autoScrollInterval));
+            container.addEventListener('mouseleave', () => {
+                autoScrollInterval = setInterval(() => scrollCategories(1), 5000);
+            });
+        }
+
+        // Automatic slideshow for featured gallery cards (keep existing)
+        const cards = document.querySelectorAll('.artistic-gallery-card');
+        cards.forEach(card => {
+            const img = card.querySelector('.artistic-image');
+            if (img && img.dataset.images) {
+                const images = img.dataset.images.split(',');
+                if (images.length > 1) {
+                    let idx = 0;
+                    setInterval(() => {
+                        idx = (idx + 1) % images.length;
+                        img.src = images[idx];
+                    }, 3500);
+                }
+            }
+        });
+    });
+
+
+        // Automatic slideshow for featured gallery cards
         const cards = document.querySelectorAll('.artistic-gallery-card');
         cards.forEach(card => {
             const img = card.querySelector('.artistic-image');

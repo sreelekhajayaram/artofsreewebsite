@@ -1,0 +1,65 @@
+/* Admin Panel Fixes - Black text, colorful buttons, no fixed navbar */
+
+/* Black text everywhere in admin */
+.admin-hero, .admin-page-wrapper, .admin-card, .admin-table {
+  color: #000000 !important;
+}
+
+.admin-hero *, .admin-page-wrapper *, .admin-card *, .admin-table * {
+  color: #000000 !important;
+}
+
+.admin-table td {
+  color: #000000 !important;
+}
+
+.admin-table th {
+  color: #000000 !important;
+}
+
+/* Order Details black */
+.booking-details h5, .card-header h5 {
+  color: #000000 !important;
+}
+
+.card-body strong {
+  color: #000000 !important;
+}
+
+/* Colorful export buttons */
+.btn-gold {
+  background: linear-gradient(135deg, #ffd700, #ffed4e) !important;
+  color: #000 !important;
+  border: none !important;
+}
+
+.btn-light {
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef) !important;
+  color: #000 !important;
+  border: 1px solid #dee2e6 !important;
+}
+
+.export-btn {
+  background: linear-gradient(135deg, #4ecdc4, #44a08d) !important;
+  color: white !important;
+}
+
+.btn-export {
+  background: linear-gradient(135deg, #667eea, #764ba2) !important;
+  color: white !important;
+  border: none !important;
+}
+
+/* Remove fixed navbar ONLY admin dashboard */
+.admin-page-wrapper .sticky-top,
+.admin-hero .sticky-top,
+.adminpanel .sticky-top {
+  position: static !important;
+  top: 0 !important;
+  z-index: auto !important;
+}
+
+/* User Directory links black */
+.nav-link-admin, a[href*="admin_dashboard"] {
+  color: #000 !important;
+}

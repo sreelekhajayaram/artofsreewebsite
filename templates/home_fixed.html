@@ -47,7 +47,7 @@
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title">{{ cat.get_name_display }}</h5>
                         <p class="card-text flex-grow-1">{{ cat.description|default:"Discover beautiful artworks in this category"|truncatewords:20 }}</p>
-                        <a href="{% url 'category_detail' cat.slug %}" class="view-art-btn mt-auto">View {{ cat.products.count }} items</a>
+<a href="{% url 'category_detail' cat.slug %}" class="view-art-btn mt-auto" style="color: white !important;">View {{ cat.products.count }} items</a>
                     </div>
                 </div>
             </div>
