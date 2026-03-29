@@ -1,0 +1,61 @@
+/* Force black product text + titles, red out-of-stock */
+.p-text, .card-text, .card-title, .product-h, .artistic-card-title, h5.card-title {
+  color: #000000 !important;
+}
+
+.font-weight-bold, strong, .product-price, .artistic-price {
+  color: #000000 !important;
+}
+
+#gallery .card-text, #gallery strong, #gallery .p-text, #gallery .card-title {
+  color: #000000 !important;
+}
+
+#gallery .card-text.text-muted {
+  color: #000000 !important;
+}
+
+.card-body p, .product-card .card-text, .product-card .card-title {
+  color: #000000 !important;
+}
+
+.hero-atelier #gallery .p-text,
+.hero-atelier #gallery .card-text,
+.hero-atelier #gallery strong,
+.hero-atelier #gallery .card-title {
+  color: #000000 !important;
+}
+
+/* Category page */
+.category-card .p-text,
+.product-card .p-text,
+.product-card .product-h,
+.product-card .card-title {
+  color: #000000 !important;
+}
+
+small.text-muted {
+  color: #333333 !important;
+}
+
+/* Out of Stock BOLD RED - Category pages */
+.text-danger, p[class*="Stock"], .out-of-stock {
+  color: #dc3545 !important;
+}
+
+p:contains("Out of Stock"), p:contains("out of stock"), p.small:contains("Out of Stock") {
+  color: #dc3545 !important;
+  font-weight: bold !important;
+  font-size: 1.1em !important;
+  text-transform: uppercase !important;
+}
+
+.product-card p[class*="Stock"], .product-card .text-danger, .card p:contains("Out of Stock") {
+  color: #dc3545 !important;
+  font-weight: bold !important;
+}
+
+.category-detail .text-danger, .category-detail p:contains("Out of Stock") {
+  color: #dc3545 !important;
+  font-weight: bold !important;
+}
