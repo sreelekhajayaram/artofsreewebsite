@@ -2,7 +2,244 @@
 {% load static %}
 
 {% block content %}
+<style>
+/* Enhanced View Art Button - Rounded Blue Gradient */
+.view-art-btn {
+  background: linear-gradient(135deg, #007bff, #0056b3) !important;
+  border: none !important;
+  border-radius: 50px !important;
+  padding: 12px 24px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.5px !important;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+  box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3) !important;
+  color: white !important;
+  text-decoration: none !important;
+  display: block !important;
+  text-align: center !important;
+}
+
+.view-art-btn:hover {
+  transform: translateY(-3px) scale(1.02) !important;
+  box-shadow: 0 8px 25px rgba(0, 123, 255, 0.4) !important;
+  background: linear-gradient(135deg, #0056b3, #004085) !important;
+  color: white !important;
+}
+
+/* Category Card Enhancements */
+/* Featured Gallery Style for Category Cards */
+.card-inner {
+  position: relative;
+  height: 100%;
+  transition: transform 0.4s ease;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.card-inner:hover {
+  transform: translateY(-10px);
+}
+
+.card-front, .card-back {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+}
+
+.card-back {
+  transform: rotateY(180deg);
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.card-inner:hover .overlay {
+  opacity: 1;
+}
+
+.overlay-content {
+  color: white;
+  text-align: center;
+  transform: translateY(20px);
+  transition: transform 0.3s ease;
+}
+
+.card-inner:hover .overlay-content {
+  transform: translateY(0);
+}
+
+.artistic-image {
+  transition: transform 0.4s ease;
+}
+
+.card-inner:hover .artistic-image {
+  transform: scale(1.05);
+}
+
+.no-image {
+  background: #f8f9fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.category-card .card-title {
+  font-size: 1.25rem !important;
+  color: #222 !important;
+  text-shadow: none !important;
+  margin-bottom: 1rem !important;
+}
+
+.category-card .card-text {
+  color: #222 !important;
+  font-size: 0.95rem !important;
+  line-height: 1.6 !important;
+}
+
+/* Button enhancements */
+.category-card .view-art-btn {
+  background: linear-gradient(135deg, #007bff, #0056b3) !important;
+  border: none !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.5px !important;
+  transition: all 0.3s ease !important;
+}
+
+.category-card .view-art-btn:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 25px rgba(0,123,255,0.4) !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .category-card:hover {
+    transform: translateY(-4px) !important;
+  }
+}
+
+.product-description {
+  font-weight: 500 !important;
+  color: #333 !important;
+  font-size: 0.95rem !important;
+  line-height: 1.5 !important;
+  margin-bottom: 1rem !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 3 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+}
+</style>
+<style>
+/* Professional Enhanced Hero Section - Blue Card Design */
+.hero-atelier {
+    background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+    border-radius: 30px;
+    padding: 60px 40px;
+    margin: 20px 0;
+    box-shadow: 
+        0 25px 50px rgba(12, 48, 88, 0.4),
+        0 0 0 1px rgba(255, 255, 255, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-atelier::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+    animation: shine 3s infinite;
+    pointer-events: none;
+}
+
+@keyframes shine {
+    0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+    100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+}
+
+.hero-atelier::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+}
+
+.hero-atelier .eyebrow {
+    font-size: 1.1rem;
+    letter-spacing: 3px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.hero-atelier h1 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    text-shadow: 
+        0 4px 8px rgba(0,0,0,0.4),
+        0 0 20px rgba(173, 216, 230, 0.3);
+    line-height: 1.1;
+    margin-bottom: 20px;
+}
+
+.hero-atelier .lead {
+    font-size: 1.3rem;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    margin-bottom: 30px;
+}
+
+.hero-atelier .btn {
+    padding: 15px 30px;
+    font-size: 1.1rem;
+    border-radius: 50px;
+    text-shadow: none;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+    transition: all 0.3s ease;
+}
+
+.hero-atelier .btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(0,0,0,0.4);
+}
+
+@media (max-width: 768px) {
+    .hero-atelier {
+        padding: 40px 25px;
+        margin: 10px 0;
+        border-radius: 25px;
+    }
+    .hero-atelier h1 {
+        font-size: 2.5rem;
+    }
+}
+</style>
+
 <section class="hero-atelier mb-5">
+    <div class="container">
     <div class="row align-items-center">
         <div class="col-lg-7">
             <p class="eyebrow text-uppercase text-light mb-2">ArtOfSree</p>
@@ -98,7 +335,7 @@
 
 <section id="gallery" class="mb-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="h3">Featured Gallery</h2>
+<h2 class="h3">Gallery</h2>
         <a href="#shop" class="btn btn-outline-dark">View all <i class="fas fa-arrow-right ml-1"></i></a>
     </div>
     <div class="row">
@@ -109,16 +346,18 @@
                 <img src="{{ product.images.first.image.url }}" class="card-img-top" alt="{{ product.title }}" style="height: 200px; object-fit: cover;">
                 {% else %}
                 <div class="d-flex align-items-center justify-content-center bg-secondary text-white" style="height: 200px;">
+                <div class="d-flex align-items-center justify-content-center bg-secondary text-white" style="height: 200px;">
                     No Image
                 </div>
                 {% endif %}
-                <div class="card-body">
+                <div class="card-body d-flex flex-column">
                     <h5 class="card-title">{{ product.title }}</h5>
-                    <p class="card-text text-muted">{{ product.description|truncatewords:20 }}</p>
+                    <p class="card-text product-description">{{ product.description|truncatewords:20 }}</p>
                     <p class="card-text"><strong>₹ {{ product.price }}</strong></p>
+                    <div class="mt-auto"></div>
                 </div>
                 <div class="card-footer bg-white">
-                    <a href="{% url 'product_detail' product.slug %}" class="btn btn-primary btn-block">View Art</a>
+                    <a href="{% url 'product_detail' product.slug %}" class="btn btn-primary rounded-pill w-100 view-art-btn">View Art</a>
                 </div>
             </div>
         </div>
@@ -153,22 +392,44 @@
             </div>
         </form>
     </div>
-    <div class="row">
+        <div class="row gx-4 gy-4">
         {% for cat in categories %}
-        <div class="col-md-4 mb-3">
-            <div class="card h-100 shadow-sm">
-                {% if cat.image %}
-                <img class="card-img-top" src="{{ cat.image.url }}" alt="{{ cat.get_name_display }}" style="height:200px;object-fit:cover;">
-                {% endif %}
-                <div class="card-body d-flex flex-column">
-                    <h5 class="card-title">{{ cat.get_name_display }}</h5>
-                    <p class="card-text text-muted">{{ cat.description|default:"Explore unique artworks." }}</p>
-                    <a href="{% url 'category_detail' cat.slug %}" class="btn btn-outline-dark mt-auto">View {{ cat.products.count }} items</a>
+        <div class="col-lg-4 col-md-6 col-sm-12">
+            <div class="card h-100 shadow-sm border-0 artistic-gallery-card">
+                <div class="card-inner">
+                    <div class="card-front">
+                        {% if cat.image %}
+                        <img src="{{ cat.image.url }}" alt="{{ cat.get_name_display }}" class="card-img-top artistic-image" style="height: 240px; object-fit: cover;">
+                        <div class="overlay">
+                            <div class="overlay-content">
+                                <i class="fas fa-eye"></i>
+                                <span>Explore</span>
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="no-image" style="height: 240px;">
+                            <i class="fas fa-image fa-3x text-muted"></i>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="card-back">
+                        <div class="card-body p-4">
+                            <h5 class="fw-bold text-dark mb-2">{{ cat.get_name_display }}</h5>
+                            <p class="text-dark lh-sm small mb-3 flex-grow-1">
+                                {{ cat.description|default:"Unique artworks await"|truncatewords:15 }}
+                            </p>
+                            <a href="{% url 'category_detail' cat.slug %}" class="btn btn-primary rounded-pill w-100">View {{ cat.products.count }} items</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
         {% empty %}
-        <div class="col-12">No categories available.</div>
+        <div class="col-12 text-center py-5">
+            <i class="fas fa-th fa-3x text-muted mb-3"></i>
+            <h4 class="text-muted">No categories available yet</h4>
+            <p class="text-muted">New artistic categories coming soon!</p>
+        </div>
         {% endfor %}
     </div>
 </section>
@@ -751,4 +1012,5 @@ It includes:
 }
 </style>
 {% endblock %}
+
 

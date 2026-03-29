@@ -1,0 +1,65 @@
+
+
+
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<style>
+/* Enhanced Category Cards - Guaranteed Visibility */
+.category-card {
+  min-height: 350px !important;
+  position: relative !important;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%) !important;
+}
+
+.category-card .card-img-top {
+  min-height: 220px !important;
+}
+
+.image-placeholder {
+  background: linear-gradient(135deg, #007bff, #0056b3) !important;
+  color: white !important;
+}
+
+.image-placeholder i {
+  color: white !important;
+}
+</style>
+
+<section id="shop" class="mb-5" style="min-height: 500px;">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="h4 section-header">Shop by Category</h2>
+            <small class="text-muted">{% if categories %}{{ categories|length }} categories available{% else %}Loading...{% endif %}</small>
+        </div>
+        <div class="row gx-4 gy-4">
+            {% for cat in categories %}
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                <div class="category-card card h-100">
+                    {% if cat.image %}
+                    <img src="{{ cat.image.url }}" class="card-img-top" alt="{{ cat.get_name_display }}">
+                    {% else %}
+                    <div class="bg-light d-flex align-items-center justify-content-center" style="height: 240px;">
+                        <i class="fas fa-image fa-4x text-muted"></i>
+                    </div>
+                    {% endif %}
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">{{ cat.get_name_display }}</h5>
+                        <p class="card-text flex-grow-1">{{ cat.description|default:"Discover beautiful artworks in this category"|truncatewords:20 }}</p>
+                        <a href="{% url 'category_detail' cat.slug %}" class="view-art-btn mt-auto">View {{ cat.products.count }} items</a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <div class="text-center py-5">
+                    <i class="fas fa-layer-group fa-3x text-muted mb-3"></i>
+                    <h5 class="text-muted">No categories yet</h5>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

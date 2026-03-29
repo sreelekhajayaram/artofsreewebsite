@@ -28,7 +28,19 @@ def home(request):
         """Return sort key: defined categories get explicit order, others get high order to maintain relative order"""
         return category_order.get(category.name, 100)
     
-    categories = sorted(Category.objects.all(), key=get_sort_key)
+    # Filter categories with products only, prefetch for efficiency
+    categories = sorted(
+        Category.objects.filter(products__isnull=False).distinct(), 
+        key=get_sort_key
+    )
+    
+    # Debug context
+    request.session['debug_categories'] = categories.count()
+    
+    # Fallback if no categories with products
+    if not categories:
+        from shop.models import Category
+        categories = Category.objects.order_by('name')[:3]
 
     # Handle search and category filtering
     category_slug = request.GET.get('category')
