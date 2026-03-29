@@ -1,5 +1,5 @@
-env.py
+.env
 __pycache__/
-static/
+staticfiles/&#10;media/&#10;venv/&#10;db.sqlite3&#10;*.pyc&#10;__pycache__/&#10;static/
 media/
 .config/
