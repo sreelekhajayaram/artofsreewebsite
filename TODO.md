@@ -1,10 +1,10 @@
-# Git Push Fix - Remove Secret & Push to AWS Repo
+# Static CSS Fix Progress
+- [x] 1. Create TODO.md ✅
+- [x] 2. Fix ai_website/index.html (absolute paths + cache-bust) ✅
+- [x] 3. Fix ai_website/css/style.css (absolute asset URL) ✅
+- [x] 4. Update templates/base.html (cache-bust CSS links) ✅
+- [x] 5. Update README.md (deployment instructions) ✅
+- [x] 6. Run `python manage.py collectstatic` ✅
+- [ ] 7. Test zip/extract + verify
+- [ ] 8. Complete ✅
 
-## Status: Complete ✅
-
-1. [x] Verify .gitignore excludes .env, media/, staticfiles/, db.sqlite3, venv/ (updated)
-2. [x] git gc --aggressive --prune=now (compressed repo)
-3. [x] git config http.postBuffer 524288000 (set for large push)
-4. [x] git push (succeeded: 8170 objects, 20.54 MiB | 8.25 MiB/s, no errors/secret block)
-5. [x] No secret block needed (none detected after env migration)
-6. [x] Push success confirmed - ahead synced to origin/main
