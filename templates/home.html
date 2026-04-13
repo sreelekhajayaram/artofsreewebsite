@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load media_helpers %}
 
 {% block content %}
 <style>
@@ -171,7 +172,7 @@
     border-radius: 30px;
     padding: 60px 40px;
     margin: 20px 0;
-    box-shadow: 
+    box-shadow:
         0 25px 50px rgba(0, 0, 0, 0.6),
         0 0 0 1px rgba(255, 215, 0, 0.2),
         inset 0 1px 0 rgba(255, 255, 255, 0.05);
@@ -219,7 +220,7 @@
     font-size: 3.5rem;
     font-weight: 700;
     color: #ffffff !important;
-    text-shadow: 
+    text-shadow:
         0 4px 8px rgba(0,0,0,0.8),
         0 0 20px rgba(255, 255, 255, 0.2);
     line-height: 1.1;
@@ -282,13 +283,7 @@
                 <div class="carousel-inner">
                     {% for cat in categories %}
                     <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                        {% if cat.image %}
-                        <img src="{{ cat.image.url }}" alt="{{ cat.get_name_display }}" class="d-block w-100">
-                        {% else %}
-                        <div class="d-flex align-items-center justify-content-center h-100 text-light bg-secondary">
-                            Add an image for {{ cat.get_name_display }}
-                        </div>
-                        {% endif %}
+                        <img src="{% category_card_image_url cat %}" alt="{{ cat.get_name_display }}" class="d-block w-100">
                         <div class="carousel-caption d-none d-md-block">
                             <h5 class="calligraphy-title">{{ cat.get_name_display }}</h5>
                         </div>
@@ -363,18 +358,11 @@
         {% for product in products %}
         <div class="col-md-4 mb-4">
             <div class="card h-100 shadow-sm">
-                {% if product.images.first %}
-                <img src="{{ product.images.first.image.url }}" class="card-img-top" alt="{{ product.title }}" style="height: 200px; object-fit: cover;">
-                {% else %}
-                <div class="d-flex align-items-center justify-content-center bg-secondary text-white" style="height: 200px;">
-                <div class="d-flex align-items-center justify-content-center bg-secondary text-white" style="height: 200px;">
-                    No Image
-                </div>
-                {% endif %}
+                <img src="{% product_card_image_url product %}" class="card-img-top" alt="{{ product.title }}" style="height: 200px; object-fit: cover;">
                 <div class="card-body d-flex flex-column">
                     <h5 class="card-title">{{ product.title }}</h5>
                     <p class="card-text product-description">{{ product.description|truncatewords:20 }}</p>
-<p class="card-text"><strong style="color: white !important;">₹ {{ product.price }}</strong></p>
+<p class="card-text"><strong style="color: #FFD700 !important;">₹ {{ product.price }}</strong></p>
                     <div class="mt-auto"></div>
                 </div>
                 <div class="card-footer bg-white">
@@ -403,13 +391,7 @@
         <div class="category-card flex-shrink-0" style="width: 300px; max-width: 300px; scroll-snap-align: start; background: white; border-radius: 16px; box-shadow: 0 8px 25px rgba(0,0,0,0.1); overflow: hidden; transition: all 0.3s ease;" data-category-name="{{ feat.category.name }}" data-category-desc="{{ feat.category.description|default:feat.product.description|default:'Unique artworks' |truncatewords:15 }}">
             <div class="card h-100 shadow-sm border-0">
                 <div class="category-image-container">
-                    {% if feat.product.images.first %}
-                    <img src="{{ feat.product.images.first.image.url }}" alt="{{ feat.category.name }}" class="category-image">
-                    {% else %}
-                    <div class="no-image" style="height: 240px;">
-                        <i class="fas fa-image fa-3x text-muted"></i>
-                    </div>
-                    {% endif %}
+                    <img src="{% product_card_image_url feat.product %}" alt="{{ feat.category.name }}" class="category-image">
                 </div>
                 <div class="category-overlay">
                     <div class="category-overlay-content">
@@ -530,7 +512,7 @@ It includes:
                 <h2 class="h3 ai-insights-title">🎨 AI Portrait Insights</h2>
                 <p class="text-muted">Smart predictions for your portrait orders</p>
             </div>
-            
+
             <div class="row">
                 <!-- SLR Card - Predict Completion Time -->
                 <div class="col-md-6 mb-4">
@@ -540,12 +522,13 @@ It includes:
                         </div>
                         <h4 class="ai-card-title">Predict Completion Time</h4>
                         <p class="ai-card-desc">Estimate how many days your portrait will take based on number of faces.</p>
-                        <button class="btn btn-ai-primary" onclick="openSLRModal()">
-                            <i class="fas fa-calculator mr-2"></i>Open Predictor
+                        <button type="button" class="btn btn-ai-primary" onclick="openSLRModal(event)">
+                         Predict Completion Time
                         </button>
+
                     </div>
                 </div>
-                
+
                 <!-- MLR Card - Predict Delivery Date -->
                 <div class="col-md-6 mb-4">
                     <div class="ai-card mlr-card h-100">
@@ -554,8 +537,8 @@ It includes:
                         </div>
                         <h4 class="ai-card-title">Predict Delivery Date</h4>
                         <p class="ai-card-desc">Get your expected delivery date based on multiple factors.</p>
-                        <button class="btn btn-ai-secondary" onclick="openMLRModal()">
-                            <i class="fas fa-calendar-alt mr-2"></i>Open Predictor
+                        <button type="button" class="btn btn-ai-secondary" onclick="openMLRModal(event)">
+                          Predict Delivery Date
                         </button>
                     </div>
                 </div>
@@ -570,17 +553,17 @@ It includes:
         <span class="ai-modal-close" onclick="closeSLRModal()">&times;</span>
         <h3 class="ai-modal-title">🎯 AI Completion Time Predictor</h3>
         <p class="ai-modal-subtitle">Simple Linear Regression Model</p>
-        
+
         <div class="ai-form-group">
             <label for="slrFaces">Number of Faces:</label>
             <input type="number" id="slrFaces" class="ai-input" min="1" placeholder="Enter number of faces (min: 1)">
             <small class="ai-input-hint">Enter a value between 1 and 20</small>
         </div>
-        
+
         <button class="btn btn-ai-primary btn-block" onclick="calculateSLR()">
             <i class="fas fa-magic mr-2"></i>Predict Completion Time
         </button>
-        
+
         <div id="slrResult" class="ai-result-card" style="display: none;">
             <h5 class="ai-result-title">Estimated Completion Time</h5>
             <p class="ai-result-value" id="slrOutput">0 Days</p>
@@ -595,12 +578,12 @@ It includes:
         <span class="ai-modal-close" onclick="closeMLRModal()">&times;</span>
         <h3 class="ai-modal-title">📅 AI Delivery Date Predictor</h3>
         <p class="ai-modal-subtitle">Multiple Linear Regression Model</p>
-        
+
         <div class="ai-form-group">
             <label for="mlrFaces">Number of Faces:</label>
             <input type="number" id="mlrFaces" class="ai-input" min="1" placeholder="Enter number of faces">
         </div>
-        
+
         <div class="ai-form-group">
             <label for="mlrSize">Canvas Size:</label>
             <select id="mlrSize" class="ai-select">
@@ -609,7 +592,7 @@ It includes:
                 <option value="2">A2</option>
             </select>
         </div>
-        
+
         <div class="ai-form-group">
             <label for="mlrBackground">Background Complexity:</label>
             <select id="mlrBackground" class="ai-select">
@@ -618,7 +601,7 @@ It includes:
                 <option value="2">Detailed</option>
             </select>
         </div>
-        
+
         <div class="ai-form-group">
             <label for="mlrRush">Rush Order:</label>
             <select id="mlrRush" class="ai-select">
@@ -626,11 +609,11 @@ It includes:
                 <option value="-2">Yes</option>
             </select>
         </div>
-        
+
         <button class="btn btn-ai-secondary btn-block" onclick="calculateMLR()">
             <i class="fas fa-magic mr-2"></i>Predict Delivery Date
         </button>
-        
+
         <div id="mlrResult" class="ai-result-card ai-result-green" style="display: none;">
             <h5 class="ai-result-title">Expected Delivery Date</h5>
             <p class="ai-result-value" id="mlrOutput">-</p>
@@ -644,210 +627,84 @@ It includes:
 
 {% block extra_js %}
 <script>
-    // ============================================================
-    // AI PORTRAIT INSIGHTS - JAVASCRIPT IMPLEMENTATION
-    // ============================================================
-    
-    // ------------------------------------------------------------
-    // SIMPLE LINEAR REGRESSION (SLR) IMPLEMENTATION
-    // ------------------------------------------------------------
-    // Model: Y = 2 + (2 × Number_of_Faces)
-    // Where Y = Completion Days
-    // Coefficients are predefined for mini project simulation
-    // ------------------------------------------------------------
-    
-    function openSLRModal() {
-        document.getElementById('slrModal').style.display = 'block';
-        document.body.style.overflow = 'hidden';
-    }
-    
-    function closeSLRModal() {
-        document.getElementById('slrModal').style.display = 'none';
-        document.body.style.overflow = 'auto';
-        document.getElementById('slrFaces').value = '';
-        document.getElementById('slrResult').style.display = 'none';
-    }
-    
-    function calculateSLR() {
-        var faces = document.getElementById('slrFaces').value;
-        
-        if (faces === '' || faces === null) {
-            alert('Please enter the number of faces.');
-            return;
-        }
-        
-        var facesNum = parseInt(faces);
-        
-        if (facesNum < 1) {
-            alert('Number of faces must be at least 1.');
-            return;
-        }
-        
-        if (facesNum > 20) {
-            alert('Number of faces cannot exceed 20. Please contact us for larger orders.');
-            return;
-        }
-        
-        // SLR Formula: Y = 2 + (2 × Number_of_Faces)
-        var completionDays = 2 + (2 * facesNum);
-        
-        document.getElementById('slrOutput').textContent = completionDays + ' Days';
-        document.getElementById('slrResult').style.display = 'block';
-    }
-    
-    // ------------------------------------------------------------
-    // MULTIPLE LINEAR REGRESSION (MLR) IMPLEMENTATION
-    // ------------------------------------------------------------
-    // Model: Total Days = 2 + (2 × Faces) + Size Value + Background Value + Rush Adjustment
-    // Canvas Size: A4=0, A3=1, A2=2
-    // Background: Simple=0, Medium=1, Detailed=2
-    // Rush Order: Yes=-2, No=0
-    // Coefficients are predefined for mini project simulation
-    // ------------------------------------------------------------
-    
-    function openMLRModal() {
-        document.getElementById('mlrModal').style.display = 'block';
-        document.body.style.overflow = 'hidden';
-    }
-    
-    function closeMLRModal() {
-        document.getElementById('mlrModal').style.display = 'none';
-        document.body.style.overflow = 'auto';
-        document.getElementById('mlrFaces').value = '';
-        document.getElementById('mlrSize').selectedIndex = 0;
-        document.getElementById('mlrBackground').selectedIndex = 0;
-        document.getElementById('mlrRush').selectedIndex = 0;
-        document.getElementById('mlrResult').style.display = 'none';
-    }
-    
-    function calculateMLR() {
-        var faces = document.getElementById('mlrFaces').value;
-        var size = document.getElementById('mlrSize').value;
-        var background = document.getElementById('mlrBackground').value;
-        var rush = document.getElementById('mlrRush').value;
-        
-        if (faces === '' || faces === null) {
-            alert('Please enter the number of faces.');
-            return;
-        }
-        
-        var facesNum = parseInt(faces);
-        
-        if (facesNum < 1) {
-            alert('Number of faces must be at least 1.');
-            return;
-        }
-        
-        var sizeNum = parseInt(size);
-        var backgroundNum = parseInt(background);
-        var rushNum = parseInt(rush);
-        
-        // MLR Formula: Total Days = 2 + (2 × Faces) + Size + Background + Rush
-        var totalDays = 2 + (2 * facesNum) + sizeNum + backgroundNum + rushNum;
-        
-        if (totalDays < 1) {
-            totalDays = 1;
-        }
-        
-        var today = new Date();
-        var deliveryDate = new Date(today);
-        deliveryDate.setDate(today.getDate() + totalDays);
-        
-        var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-        var formattedDate = deliveryDate.toLocaleDateString('en-US', options);
-        
-        document.getElementById('mlrOutput').textContent = formattedDate;
-        document.getElementById('mlrResult').style.display = 'block';
-    }
-    
-    // Close modal when clicking outside
-    window.onclick = function(event) {
-        var slrModal = document.getElementById('slrModal');
-        var mlrModal = document.getElementById('mlrModal');
-        
-        if (event.target === slrModal) {
-            closeSLRModal();
-        }
-        if (event.target === mlrModal) {
-            closeMLRModal();
-        }
+// ======================= FIXED AI MODAL =======================
+
+// OPEN MODALS
+function openSLRModal(e) {
+    if (e) e.preventDefault();
+    document.getElementById('slrModal').style.display = 'flex';
+}
+
+function openMLRModal(e) {
+    if (e) e.preventDefault();
+    document.getElementById('mlrModal').style.display = 'flex';
+}
+
+// CLOSE MODALS
+function closeSLRModal() {
+    document.getElementById('slrModal').style.display = 'none';
+    document.getElementById('slrFaces').value = '';
+    document.getElementById('slrResult').style.display = 'none';
+}
+
+function closeMLRModal() {
+    document.getElementById('mlrModal').style.display = 'none';
+    document.getElementById('mlrFaces').value = '';
+    document.getElementById('mlrResult').style.display = 'none';
+}
+
+// ======================= SLR =======================
+function calculateSLR() {
+    let faces = document.getElementById('slrFaces').value;
+
+    if (!faces) {
+        alert("Enter number of faces");
+        return;
     }
 
-        // Category card hover enhancement - populate overlay title/desc and click handling
-        document.addEventListener('DOMContentLoaded', function() {
-            const categoryCards = document.querySelectorAll('.category-card');
-            categoryCards.forEach(card => {
-                const titleEl = card.querySelector('.category-overlay-title');
-                const descEl = card.querySelector('.category-overlay-desc');
-                if (titleEl && descEl) {
-                    titleEl.textContent = card.dataset.categoryName;
-                    descEl.textContent = card.dataset.categoryDesc;
-                }
-            });
-            // Prevent scroll buttons from interfering with card clicks
-            const scrollBtns = document.querySelectorAll('.carousel-btn');
-            scrollBtns.forEach(btn => {
-                btn.addEventListener('click', (e) => e.stopPropagation());
-            });
+    faces = parseInt(faces);
 
-        // Horizontal Category Carousel Functionality
-        window.scrollCategories = function(direction) {
-            const container = document.getElementById('categoryScroll');
-            const cardWidth = 320; // card width + gap
-            const scrollAmount = direction * cardWidth;
-            container.scrollBy({
-                left: scrollAmount,
-                behavior: 'smooth'
-            });
-        }
+    if (faces < 1) {
+        alert("Minimum 1 face required");
+        return;
+    }
 
-        // Auto-scroll every 5 seconds (optional)
-        let autoScrollInterval;
-        const container = document.getElementById('categoryScroll');
-        if (container) {
-            autoScrollInterval = setInterval(() => {
-                scrollCategories(1);
-            }, 5000);
-            container.addEventListener('mouseenter', () => clearInterval(autoScrollInterval));
-            container.addEventListener('mouseleave', () => {
-                autoScrollInterval = setInterval(() => scrollCategories(1), 5000);
-            });
-        }
+    let days = 2 + (2 * faces);
 
-        // Automatic slideshow for featured gallery cards (keep existing)
-        const cards = document.querySelectorAll('.artistic-gallery-card');
-        cards.forEach(card => {
-            const img = card.querySelector('.artistic-image');
-            if (img && img.dataset.images) {
-                const images = img.dataset.images.split(',');
-                if (images.length > 1) {
-                    let idx = 0;
-                    setInterval(() => {
-                        idx = (idx + 1) % images.length;
-                        img.src = images[idx];
-                    }, 3500);
-                }
-            }
-        });
-    });
+    document.getElementById('slrOutput').innerText = days + " Days";
+    document.getElementById('slrResult').style.display = 'block';
+}
 
+// ======================= MLR =======================
+function calculateMLR() {
+    let faces = parseInt(document.getElementById('mlrFaces').value || 0);
+    let size = parseInt(document.getElementById('mlrSize').value);
+    let bg = parseInt(document.getElementById('mlrBackground').value);
+    let rush = parseInt(document.getElementById('mlrRush').value);
 
-        // Automatic slideshow for featured gallery cards
-        const cards = document.querySelectorAll('.artistic-gallery-card');
-        cards.forEach(card => {
-            const img = card.querySelector('.artistic-image');
-            if (img && img.dataset.images) {
-                const images = img.dataset.images.split(',');
-                if (images.length > 1) {
-                    let idx = 0;
-                    setInterval(() => {
-                        idx = (idx + 1) % images.length;
-                        img.src = images[idx];
-                    }, 3500);
-                }
-            }
-        });
-    });
+    if (faces < 1) {
+        alert("Enter valid faces");
+        return;
+    }
+
+    let totalDays = 2 + (2 * faces) + size + bg + rush;
+    if (totalDays < 1) totalDays = 1;
+
+    let date = new Date();
+    date.setDate(date.getDate() + totalDays);
+
+    document.getElementById('mlrOutput').innerText = date.toDateString();
+    document.getElementById('mlrResult').style.display = 'block';
+}
+
+// CLOSE ON OUTSIDE CLICK
+window.onclick = function(e) {
+    let slr = document.getElementById('slrModal');
+    let mlr = document.getElementById('mlrModal');
+
+    if (e.target === slr) slr.style.display = "none";
+    if (e.target === mlr) mlr.style.display = "none";
+};
 </script>
 
 <style>
@@ -958,31 +815,27 @@ It includes:
     display: none;
     position: fixed;
     z-index: 9999;
-    left: 0;
     top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(5px);
-    animation: fadeIn 0.3s ease;
+    background: rgba(0,0,0,0.7);
+
+    justify-content: center;
+    align-items: center;
+}
+
+.ai-modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 500px;
 }
 
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
-}
-
-.ai-modal-content {
-    background-color: white;
-    margin: 5% auto;
-    padding: 35px;
-    border-radius: 20px;
-    width: 90%;
-    max-width: 450px;
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
-    animation: slideIn 0.3s ease;
-    position: relative;
 }
 
 @keyframes slideIn {
@@ -1103,11 +956,11 @@ It includes:
         padding: 25px;
         width: 95%;
     }
-    
+
     .ai-card {
         padding: 25px 20px;
     }
-    
+
     .ai-result-value {
         font-size: 1.5rem;
     }
